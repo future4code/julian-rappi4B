@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import api from '../../services/api'
 
 import styled from 'styled-components';
 
-const EdditProfileContainer = styled.div`
+const EditProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,11 +11,26 @@ const EdditProfileContainer = styled.div`
 `
 
 const EditProfilePage =()=>{
+  const token = localStorage.getItem('token')
+  const [editProfile, setEditProfile] = useState(null)
+
+  const onClickEditProfile = () => {    /*como tirar esse body mocado? tb está na requisição*/ 
+    const bodyEditProfile = {
+      "name": "Astrodev",
+      "email": "astrodev@future4.com",
+      "cpf": "111.111.111-13"
+    }
+    
+    api.put('profile', bodyEditProfile, {headers: {auth: token}})
+      .then((response) => {console.log(response.data)})   /* consoles não estão imprimindo na tela */
+      .catch((error) => {console.log(error)
+      })
+  }
 
   return (
-    <EdditProfileContainer>
+    <EditProfileContainer>
       <h1>Editar Perfil</h1>
-      <form>
+      <form onSubmit={onClickEditProfile}>
         <div>
             <label>Nome:</label>
             <input type="text" id="nome" />
@@ -27,9 +43,9 @@ const EditProfilePage =()=>{
             <label>CPF:</label>
             <input type="text" id="cpf"></input>
         </div>
-        <button>Salvar</button>
+        <button>Salvar</button> {/* quando clicar deve salvar e voltar para tela de perfil*/}
       </form>
-    </EdditProfileContainer>
+    </EditProfileContainer>
   )
 };
 export default EditProfilePage

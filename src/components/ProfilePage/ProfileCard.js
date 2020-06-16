@@ -1,20 +1,21 @@
 import React from 'react';
 
-const ProfileCard =()=>{
+
+const ProfileCard = (props) => {
+    const profile = props.profile
 
     return (  
         <div>
-            <h1>Meu perfil</h1>
             <div>
-                <p>Nome</p>
-                <p>Email</p>
-                <p>CPF</p>
-                <button>Editar perfil</button>
+                <p>{profile.name}</p>
+                <p>{profile.email}</p>
+                <p>{profile.cpf}</p>
+                <button onClick={()=>console.log("clicou ed perfil")}>Editar perfil</button>
             </div>
             <div>
                 <p>Endereço cadastrado</p>
-                <p>Rua, 1 - Bairro </p>
-                <button>Editar endereço</button>
+                <p>{profile.address}</p>
+                <button onClick={()=>console.log("clicou ed address")}>Editar endereço</button>
             </div>
         </div>
     )
