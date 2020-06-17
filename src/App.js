@@ -1,13 +1,9 @@
 import React from 'react';
-
-import Routes from './routes';
-import HomePage from './components/HomePage';
+import Routes from '../src/routes'
 
 function App() {
   return (
-    <div>
-      <HomePage/>
-    </div>
+      <Routes />
   );
 }
 export default App;
