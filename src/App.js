@@ -1,10 +1,11 @@
 import React from 'react';
-
 import Routes from './routes'
-
+import{AppWrapper} from './components/general/LabenuUi'
 function App() {
   return (
-    <Routes/>
+    <AppWrapper>
+      <Routes/>
+    </AppWrapper>
   );
 }
 export default App;

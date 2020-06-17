@@ -1,7 +1,17 @@
 import React from 'react';
+import {GenNavBar, MainWrapper} from '../general/LabenuUi'
 
+import{useHistory} from 'react-router-dom'
 const LoginPage =()=>{
+  const h = useHistory()
+  return (
+    <MainWrapper>
+      <h1>Login</h1>
 
-  return <h1>Login</h1>
+      <GenNavBar
+     
+      />
+    </MainWrapper>
+  )
 };
 export default LoginPage
