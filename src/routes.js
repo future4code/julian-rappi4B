@@ -1,19 +1,20 @@
 import React from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import LoginPage from './components/LoginPage';
+import SignUpPage from './components/SignUpPage';
+import AddreesRegisterPage from './components/AddreesRegisterPage';
 
-import LoginPage from './components/LoginPage/index'
-
-const Routes = ()=>{
+const Routes = () => {
   return(
-    <BrowserRouter>
+       
+        <BrowserRouter>
       <Switch>
         <Route component={LoginPage} exact path='/'/>
-        <Route/>
-        <Route/>
-        <Route/>
-        <Route/>
+        <Route component={SignUpPage} exact path='/cadastrar'/>
+        <Route component={AddreesRegisterPage} exact path ='/cadastro-endereco'/>
       </Switch>
     </BrowserRouter>
+    
   )
 };
 export default Routes
