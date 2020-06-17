@@ -20,8 +20,8 @@ const ProfilePage = () => {
 
   const login = () => {
     const bodyLogin = {
-      email: 'maria_bonita@gmail.com',
-      password: 'maria21'
+      email: 'carol@carol.com',
+      password: '123456'
     }
     api.post('login', bodyLogin).then((response) => {
       window.localStorage.setItem('token', response.data.token)
