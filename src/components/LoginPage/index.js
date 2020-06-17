@@ -3,7 +3,7 @@ import api from '../../services/api'
 import LogoRappi from '../LogoRappi/title-rappi4.png'
 import { ContainerLogin, InputLogin, InputButton } from './style'
 import { useHistory } from 'react-router-dom'
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 
 
 const LoginPage = () => {
@@ -33,7 +33,7 @@ const LoginPage = () => {
             placeholder="Senha" />
         </form>
         <InputButton>Entrar</InputButton>
-      <p>Não possui cadastro? <Button size='small' onClick={GoToRegisterPage}>Clique Aqui.</Button></p>
+      <p>Não possui cadastro? <button size='small' onClick={GoToRegisterPage}>Clique Aqui.</button></p>
     </ContainerLogin>
   
     )
