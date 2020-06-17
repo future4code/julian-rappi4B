@@ -49,14 +49,14 @@ const HomePage = () => {
       });
 
   }
-*******
-  let filteredSearch = () => {
-    const searchBox = restaurantsList.filter((search) => {
-      const search = restaurant.name
-      search.toLowerCase().includes(e.target.value)
-    })
-    restaurantsList(filteredSearch)
-  }
+
+  // let filteredSearch = () => {
+  //   const searchBox = restaurantsList.filter((search) => {
+  //     const search = restaurant.name
+  //     search.toLowerCase().includes(e.target.value)
+  //   })
+  //   restaurantsList(filteredSearch)
+  // }
 
   useEffect(() => {
 
