@@ -1,8 +1,9 @@
 import React from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import TestComponents from './components/general/TestComponents'
-import LoginPage from './components/LoginPage/index'
 import styled from 'styled-components';
+
+import LoginPage from './components/LoginPage/index'
 
 const LostPage = styled.h1``;
 

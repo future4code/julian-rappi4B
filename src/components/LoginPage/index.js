@@ -1,5 +1,5 @@
 import React from 'react';
-import {GenNavBar, MainWrapper} from '../general/LabenuUi'
+import {GenNavBar, MainWrapper} from '../general/rappi4bUi'
 
 import{useHistory} from 'react-router-dom'
 const LoginPage =()=>{
@@ -9,7 +9,6 @@ const LoginPage =()=>{
       <h1>Login</h1>
 
       <GenNavBar
-     
       />
     </MainWrapper>
   )
