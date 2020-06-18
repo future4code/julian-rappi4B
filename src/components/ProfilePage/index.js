@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api'
 
-import styled from 'styled-components';
+import {
+  ProfilePageContainer
+} from './styles';
 
 import OrderHistoryCard from './OrderHistoryCard';
 import ProfileCard from './ProfileCard';
 
 
-const ProfilePageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
-
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null)
-  const [ordersHistory, setOrdersHistory] = useState(null)
+  
+  const [ordersHistory, setOrdersHistory] = useState([])
 
   const login = () => {
     const bodyLogin = {
@@ -56,10 +52,25 @@ const ProfilePage = () => {
   return(
     <ProfilePageContainer>
       <h1>Meu perfil</h1>
+
       {profile !== null && <ProfileCard profile={profile}/>}
 
       <h1>Histórico de compras</h1>
-      <OrderHistoryCard orders={ordersHistory}/>
+      
+      {
+      ordersHistory.length === 0 ? 
+        <p>Você não realizou nenhum pedido</p> : 
+        ordersHistory.map(order => {
+          return(
+            <OrderHistoryCard
+              restaurantName={order.restaurantName} 
+              date={order.date}
+              totalPrice={order.totalPrice}
+            />
+          )
+        })
+      } 
+      
     </ProfilePageContainer>
   )
   

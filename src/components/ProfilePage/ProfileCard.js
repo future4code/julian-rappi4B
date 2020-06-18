@@ -1,8 +1,15 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
+import {
+    
+  } from './styles';
+  
 
 const ProfileCard = (props) => {
     const profile = props.profile
+
+    const history = useHistory()
 
     return (  
         <div>
@@ -10,12 +17,12 @@ const ProfileCard = (props) => {
                 <p>{profile.name}</p>
                 <p>{profile.email}</p>
                 <p>{profile.cpf}</p>
-                <button onClick={()=>console.log("clicou ed perfil")}>Editar perfil</button>
+                <button onClick={()=>history.push('/editar-perfil')}>Editar perfil</button>
             </div>
             <div>
                 <p>Endereço cadastrado</p>
                 <p>{profile.address}</p>
-                <button onClick={()=>console.log("clicou ed address")}>Editar endereço</button>
+                <button onClick={()=>history.push('/editar-endereco')}>Editar endereço</button>
             </div>
         </div>
     )
