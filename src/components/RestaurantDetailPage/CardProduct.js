@@ -1,52 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ImgCard, CardProductContainer, DivImgPro, DivTexPro, H4, SpanButton } from './styles';
-import Select from './Select';
-import Adicionar from './Adicionar';
 
-const CardProduct = (props) => {
-   const [selectedArea, setSelectedAre] = useState(false) 
-   const products = props.products 
-
-   const areaDeLogar = () => {
-    switch(selectedArea) {
-      case false:
-        return  <Adicionar goToAreaLogin={goToAreaLogin}/>
-      case true:
-        return <Select goToHomeArea={goToHomeArea}/>        
-      default:
-        return <Adicionar/>    
-    }
-  }
-
-  const goToAreaLogin = () => {
-    setSelectedAre(true)
-  }  
- 
-  const goToHomeArea = () => {
-    setSelectedAre(false)
-  }
-   
-   
-   
-   
-   
-
+const CardProduct = (props) => {  
+  const option = [0 ,1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  
+  const products = props.products    
+        
   return (   
    
-      <CardProductContainer>  
-         <DivImgPro>
-            <ImgCard src={products !== undefined && products.photoUrl} alt='Imagem do Produto'/>
-         </DivImgPro>
-         <DivTexPro>           
-            <H4>{products !== undefined && products.name}</H4>            
-            <p>{products !== undefined && products.description}</p>
-            <h4> R${products !== undefined && products.price}</h4>
-         </DivTexPro>
-           
-         <SpanButton>
-         {areaDeLogar()}
-         </SpanButton>
-      </CardProductContainer>    
+    <CardProductContainer>  
+      <DivImgPro>
+        <ImgCard src={products !== undefined && products.photoUrl} alt='Imagem do Produto'/>
+      </DivImgPro>
+      <DivTexPro>           
+        <H4>{products !== undefined && products.name}</H4>            
+        <p>{products !== undefined && products.description}</p>
+        <h4> R${products !== undefined && products.price.toFixed(2)}</h4>
+      </DivTexPro>        
+      <SpanButton>
+        <form id={products !== undefined && products.id} onSubmit={props.getProductId}>  
+          <select onChange={props.getQuantity}>
+            {option.map((option) => {
+              return <option>{option}</option>
+            })}  
+          </select>
+          <button>Adicionar ao Carrinho</button>
+        </form> 
+      </SpanButton>
+    </CardProductContainer>    
   )
 };
 export default CardProduct

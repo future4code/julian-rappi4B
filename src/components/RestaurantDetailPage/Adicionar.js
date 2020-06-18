@@ -7,7 +7,7 @@ const Adicionar = (props) => {
   return (
     
     <div>             
-      <button onClick={props.goToAreaSelect}>Adicionar</button>
+      <button onClick={props.goToSelect}>Adicionar</button>
     </div>
   )
 };
