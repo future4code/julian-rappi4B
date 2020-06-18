@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import ViewCards from './ViewCards';
 import api from '../../services/api';
 import {
@@ -11,20 +10,15 @@ import {
   ViewCardsContainer
 } from './styles';
 
-//TODO ao clicar no input de busca, exibe o texto <p>Busque por nome de restaurante</p>
-//TODO fazer renderização no input de busca, do tipo 'se a busca encontrar não encontrar tal restaurante, mostrar <p>Não encontramos :(</p>
-
 const HomePage = () => {
-  const [search, setSearch] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [searchList, setSearchList] = useState([]);
+  const [displayRestaurants, setDisplayRestaurants] = useState('ALL');
   const [categoryList, setCategoryList] = useState([]);
   const [restaurantsList, setRestaurantsList] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
-  const history = useHistory();
-
-  const onChangeSearch = (e) => {
-    setSearch(e.target.value);
-  }
-
+  //função que mapeia e filtra a lista de categorias
   const filteredCategories = () => {
     const list = restaurantsList.map((restaurant) => {
       const category = restaurant.category
@@ -36,10 +30,11 @@ const HomePage = () => {
     return categories
   }
 
+  //TODO -- requisição POST Login está retornando 404 - corrigir problema de autenticação 
   const Login = () => {
 
     const body = {
-      email: '"venganzakills@gmail.com",',
+      email: 'venganzakills@gmail.com',
       password: '123456'
     }
 
@@ -50,14 +45,33 @@ const HomePage = () => {
 
   }
 
-  // let filteredSearch = () => {
-  //   const searchBox = restaurantsList.filter((search) => {
-  //     const search = restaurant.name
-  //     search.toLowerCase().includes(e.target.value)
-  //   })
-  //   restaurantsList(filteredSearch)
-  // }
+  //função que filtra a lista de restaurantes conforme a categoria escolhida pelo usuário
+  const filteredRestaurantsLists = (event) => {
+    setDisplayRestaurants('CATEGORY');
 
+    const item = event.target.id
+
+    const list = restaurantsList.filter((restaurant) => {
+      return restaurant.category === item
+    })
+
+    setFilteredRestaurants(list)
+  }
+
+  const onChangeSearch = (e) => {
+    setInputValue(e.target.value);
+  }
+
+  //TODO-- refinar logica -- função da barra de busca, que retorna o texto que o usuário digitou no input
+  const filteredByText = () => {
+    const filter = restaurantsList.filter((restaurant) => {
+      return restaurant.name.toLowerCase().includes(inputValue, 0)
+    });
+
+    setSearchList(filter);
+  }
+
+  //função side-effect que retorna os dados atualizados dos restaurantes, buscados pelo endpoint Get Restaurants
   useEffect(() => {
 
     Login();
@@ -76,6 +90,7 @@ const HomePage = () => {
 
   }, []);
 
+  //função side-effect que 'seta' no estado a lista de categorias filtrada
   useEffect(() => {
     let categories
 
@@ -85,7 +100,7 @@ const HomePage = () => {
       setCategoryList(categories)
     }
 
-  }, [restaurantsList]);
+  }, [restaurantsList])
 
   return (
     <HomePageContainer>
@@ -97,21 +112,35 @@ const HomePage = () => {
           id='idInputSearch'
           placeholder='Restaurante'
           onChange={onChangeSearch}
-          onKeyUp={''}
+          value={inputValue}
+          onKeyDown={filteredByText}
+          onClick={() => setDisplayRestaurants('SEARCH')}
         />
 
       </InputContainer>
 
       <CategoriesList>
-        {categoryList.map((list) => {
-          return <ScrollItem onClick={() => console.log('não se esqueça de me linkar ao meu respectivo restaurante!!')}>{list}</ScrollItem>
+        {categoryList.map((category) => {
+          return <ScrollItem id={category} onClick={filteredRestaurantsLists}>{category}</ScrollItem>
         })}
       </CategoriesList>
 
       <ViewCardsContainer>
-        {restaurantsList.map((restaurant) => {
-          return <ViewCards restaurant={restaurant} />
-        })}
+        {
+          displayRestaurants === 'CATEGORY' && 
+          filteredRestaurants.map((restaurant) => {
+              return <ViewCards restaurant={restaurant} />
+            })
+          ||
+          displayRestaurants === 'SEARCH' &&
+            searchList.map((restaurant) => {
+              return <ViewCards restaurant={restaurant} />
+            })
+          ||         
+            restaurantsList.map((restaurant) => {
+              return <ViewCards restaurant={restaurant} />
+            })
+          }
       </ViewCardsContainer>
 
     </HomePageContainer>

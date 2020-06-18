@@ -19,6 +19,7 @@ export const ViewCardsContainer = styled.div`
 export const CategoriesList = styled.div`
      display: flex;
      flex-direction: row;
+     //overflow-x: scroll;
 `
 
 export const ScrollItem = styled.p`
@@ -29,7 +30,6 @@ export const ScrollItem = styled.p`
      
      :hover{
          color: #e86e5a;
-         overflow-x: scroll;
      }
 `
 
