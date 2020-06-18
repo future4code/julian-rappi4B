@@ -1,38 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import api from '../../services/api'
 
-import styled from 'styled-components';
-
-const EditProfileContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
+import {
+  EditProfileContainer
+} from './styles';
 
 const EditProfilePage =()=>{
   const [infosProfile, setInfosProfile] = useState(null)
 
+  const history = useHistory()
+
   const token = localStorage.getItem('token')
 
-  const onClickEditProfile = () => {    
+  const onClickEditProfile = (event) => {    
+    event.preventDefault()
     api.put('profile', infosProfile, {headers: {auth: token}})
-      .then((response) => {console.log(response.data.user)})   /* console tá imprimindo na tela? o q fazer c a response?*/
-      .catch((error)=>{window.alert('Não foi possível acessar seus dados. Tente novamente mais tarde') 
+      .then((response) => {
+        window.alert('Dados alterados com sucesso!') 
+        history.push('/perfil')
+      }) 
+      .catch((error)=>{window.alert('Não foi possível acessar seus dados. Tente novamente mais tarde.') 
     })
   }
 
   useEffect(()=>{
     api.get('profile', {headers: {auth: token}})
     .then((response)=>{setInfosProfile(response.data.user)})
-    .catch((error)=>{window.alert('Não foi possível acessar seus dados. Tente novamente mais tarde')}) 
+    .catch((error)=>{window.alert('Não foi possível acessar seus dados. Tente novamente mais tarde.')}) 
   },[]) 
 
   const onChangeInputProfile = (event) => {
     const {name, value} = event.target
     setInfosProfile({...infosProfile, [name]: value})
-    console.log(infosProfile)
   }
+
+  
 
   return (
     <EditProfileContainer>
@@ -67,7 +70,7 @@ const EditProfilePage =()=>{
 
             />
         </div>
-        <button>Salvar</button> {/* quando clicar deve salvar e voltar para tela de perfil*/}
+        <button>Salvar</button> 
       </form>
     </EditProfileContainer>
   )

@@ -1,41 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import api from '../../services/api'
 
-
-import styled from 'styled-components'
-import { useHistory } from 'react-router-dom';
-
-const EditAddressContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`
+import {
+  EditAddressContainer  
+} from './styles';
 
 const EditAddressPage =()=>{
   const [infosAddressForm, setInfosAddressForm] = useState(null)
 
   const token = localStorage.getItem('token')
     
-  const onClickEditAddres = () => { 
+  const onClickEditAddres = (event) => { 
+    event.preventDefault()
     api.put('address', infosAddressForm, {headers: {auth: token}})
-      .then((response) => {console.log(response.data)})  /* console tá imprimindo na tela? o q fazer c a response?*/
-      .catch((error) => {console.log(error)
+      .then((response) => {
+        console.log(response)
+        window.alert('Dados alterados com sucesso!') 
+        history.push('/perfil')
+      })  
+      .catch((error) => {window.alert('Não foi possível acessar seus dados. Tente novamente mais tarde.')
       })
  }
 
   useEffect(()=>{
     api.get('profile/address', {headers: {auth: token}})
     .then((response)=>{setInfosAddressForm(response.data.address)})
-    .catch((error)=>{window.alert('Não foi possível acessar seus dados. Tente novamente mais tarde')}) 
+    .catch((error)=>{window.alert('Não foi possível acessar seus dados. Tente novamente mais tarde.')}) 
   },[])  
 
     
   const onChangeInputAddress = (event) => {
     const {name, value} = event.target
     setInfosAddressForm({...infosAddressForm, [name]: value})
-    console.log(infosAddressForm)
   }
+
+  let history = useHistory()
       
     return (
     <EditAddressContainer>
@@ -97,7 +97,7 @@ const EditAddressPage =()=>{
           />
         </div>
 
-        <button>Salvar</button> {/* quando clicar deve salvar e voltar para tela de perfil*/}
+        <button>Salvar</button>
       </form>
   </EditAddressContainer>
   

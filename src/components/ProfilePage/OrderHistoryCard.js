@@ -1,14 +1,17 @@
 import React from 'react';
 
+import {
+    
+} from './styles';
+
 
 const OrderHistoryCard = (props) =>{
-  const order = props.orders
+  
   return(
     <div>
-        <p>{order !== null && order.restaurantName}</p>
-        <p>{order !== null && order.date}</p>
-        <p>{order !== null && order.totalPrice}</p>
-      
+      <p>{props.restaurantName !== null && props.restaurantName}</p>
+      <p>{props.date !== null && props.date}</p>
+      <p>{props.totalPrice !== null && props.totalPrice}</p>
     </div>
   )
     
