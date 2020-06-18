@@ -21,7 +21,7 @@ const Routes = ()=>{
         <Route component={SignUpPage} exact path='/cadastrar'/>
         <Route component={AddreesRegisterPage} exact path ='/cadastro-endereco'/>
         <Route component={HomePage} exact path='/home' />
-        <Route component={RestaurantDetailPage} exact path='/feed/restaurant-detail'/>
+        <Route component={RestaurantDetailPage} exact path='/restaurant-detail/:restaurantId'/>
         <Route component={ProfilePage} exact path='/perfil'/>
         <Route component={EditAddressPage} exact path='/editar-endereco'/>
         <Route component={EditProfilePage} exact path='/editar-perfil'/>
@@ -29,4 +29,5 @@ const Routes = ()=>{
     </BrowserRouter> 
   )
 };
+
 export default Routes

@@ -1,23 +1,29 @@
 import React from 'react';
-import { ViewCardsContent,
-         Img,
-         Title,
-         DeliveryTime,
-         Shipping } from './styles';
+import { useHistory } from 'react-router-dom';
+import {
+  ViewCardsContent,
+  Img,
+  Title,
+  DeliveryTime,
+  Shipping
+} from './styles';
 
 const ViewCards = (props) => {
   const restaurant = props.restaurant;
+  const history = useHistory();
 
   return (
-          <ViewCardsContent>
+    <ViewCardsContent
+      onClick={() => history.push(`/restaurant-detail/${restaurant.id}`)}
+    >
 
-          <Img src={restaurant.logoUrl} />
-          <Title>{restaurant.name}</Title>
-          
-          <DeliveryTime>{restaurant.deliveryTime} min.</DeliveryTime>
-          <Shipping>Frete R$ {restaurant.shipping}</Shipping>
+      <Img src={restaurant.logoUrl} />
+      <Title>{restaurant.name}</Title>
 
-        </ViewCardsContent>
+      <DeliveryTime>{restaurant.deliveryTime} min.</DeliveryTime>
+      <Shipping>Frete R$ {restaurant.shipping.toFixed(2)}</Shipping>
+
+    </ViewCardsContent>
   );
 };
 
