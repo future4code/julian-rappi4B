@@ -10,7 +10,8 @@ import {
   ProductCardImg, ProductCardDetails, ProductCardAddButton, 
   ProductCardCounter, ProductCardActionBar, PopupSelectWrapper,
   Select, PopupSelectButton, Option, PopupSelectShadow, OrderListenerCard,
-  ClockView, ActiveOrderDetails
+  ClockView, ActiveOrderDetails, RadioInputWrapper, RadioSelect, RadioOption,
+  RadioMark, RadioHr
 }from './rappi4bUi-styles'
 
 export const AppWrapper = styled.main`
@@ -24,11 +25,13 @@ export const AppWrapper = styled.main`
 `;
 export const MainWrapper = styled.main`
   width: 360px;
-  height: 640px;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-y: auto;
+  overflow-x:hidden;
 `;
 export const GenButton = ButtonWrapper;
 export const GenText = Text;
@@ -163,6 +166,25 @@ export const ListenerCard=(props)=>{
         <GenHiText>subtotal r${props.totalPrice}</GenHiText>
       </ActiveOrderDetails>
     </OrderListenerCard>
+  )
+};
+export const RadioInput = (props)=>{
+  const optionsList = props.radioOptions
+  return(
+    <RadioInputWrapper>
+      <GenText>{props.radioTitle}</GenText>
+      <RadioHr/>
+      {
+        optionsList.map(option=>{
+          return(
+            <RadioOption>{option}
+              <RadioSelect value={option} onClick={props.onClickOption} type='radio' /> 
+              <RadioMark></RadioMark>
+            </RadioOption>
+          )
+        })
+      }
+    </RadioInputWrapper>
   )
 };
 

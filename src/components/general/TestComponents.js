@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 import{
   MainWrapper, GenInput, GenButton, GenText,
   GenHiText, GenNavBar, GenForm, RestaurantCard,
-  ProductCard, ListenerCard
+  ProductCard, ListenerCard, RadioInput
 }from './rappi4bUi';
 
 const TestComponents =()=>{
@@ -22,10 +22,17 @@ const TestComponents =()=>{
   const removeFromCart=()=>{
     console.log('removido do cart')
     setSelValue(0)
-  }
+  };
+  const onClickRadio = (e)=> console.log(e.target.value);
   return (
     <MainWrapper>
-      <ProductCard
+
+     <RadioInput
+     radioTitle={'Forma de pagamento'}
+     radioOptions={['a prazo', 'a vista']}
+     onClickOption={onClickRadio}
+     />
+      {/* <ProductCard
       src={'https://static-images.ifood.com.br/image/upload/f_auto,t_high/pratos/d596c695-8f68-4ebf-9e09-da6e4e9d1672/201909301542_8HZD_n.png'}
       productName={'McFlurry Ovomaltine'}
       description={'McFlurry on the rocks!'}
@@ -36,14 +43,13 @@ const TestComponents =()=>{
       selectOnChange={handleSelectOption}
       removeFromCart={removeFromCart}
       />
-     
       <RestaurantCard
       src={'http://soter.ninja/futureFoods/logos/mcdonalds.png'}
       restaurantName={'MacDonalds'}
       deliveryTime={60}
       shipping={8}
       openDetails={()=> console.log('abriu detalhes do restaurante')}
-      />
+      /> */}
 
       <GenText salmon >Cadastrar</GenText>
       <GenForm>

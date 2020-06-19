@@ -105,11 +105,13 @@ export const HiText = styled.p`
 export const NavBarWrapper = styled.nav`
   //border: 1px solid black;
   position: fixed;
-  top: 93.5%;
+  background-color: #ffffff;
+  top: 94.5%;
   max-width: 360px;
   max-height: 49px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  border-top: 0.5px solid #b8b8b8;
 `;
 export const NavBarButton = styled.button`
   width: 120px;
@@ -129,9 +131,13 @@ export const RestCardWrapper = styled.article`
   border-radius: 8px;
   border: solid 1px #b8b8b8;
   width: 328px;
-  height: 188px;
+  min-height: 188px;
   margin: 8px 16px;
   margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 export const RestImg = styled.img`
   width:328px;
@@ -153,6 +159,7 @@ export const ProductCardWrapper = styled.article`
   border: solid 1px #b8b8b8;
   display: flex;
   flex-direction: row;
+  margin-top:8px;
 `;
 export const ProductCardImg = styled.img`
   width: 97px;
@@ -270,13 +277,14 @@ export const PopupSelectButton = styled.button`
 `;
 export const OrderListenerCard = styled.article`
   position: fixed;
-  bottom:60px;
+  bottom:42px;
   width: 360px;
   height: 118px;
   background-color: #e86e5a;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  border-top: 1px solid #b8b8b8;
 `;
 export const ClockView = styled.div`
   width: 80px;
@@ -294,4 +302,53 @@ export const ActiveOrderDetails = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+`;
+export const RadioInputWrapper = styled.article`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+export const RadioHr = styled.hr`
+  width: 100%;
+`;
+export const RadioOption = styled.label`
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+`;
+export const RadioSelect = styled.input`
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+`;
+export const RadioMark = styled.span`
+  height: 24px;
+  width: 24px;
+  background-color: white;
+  background-size: 1px;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  &:hover:after{
+  content: "";
+  position: absolute;
+  display: block;
+  top: 6px;
+	left: 6px;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: black; 
+  };
 `;
