@@ -1,41 +1,39 @@
-import React, { useState } from 'react';
-import DescriptionCard from './DescriptionCard';
-import { RestaurantDetailContainer, AllProductContainer } from './styles';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api'
 import { useParams } from 'react-router-dom';
-import CardProduct from './CardProduct';
+import { MainWrapper, ProductCard, PopupSelect } from '../rappi4bUi/rappi4bUi';
+import { 
+  Img, 
+  Name, 
+  Category, 
+  DeliveryTime,
+  Shipping,
+  Address,
+  DetailContainer              
+} from './styles';
+
 
 const RestaurantDetailPage =()=>{
   const [detail, setDetail] = useState()
   const [products, setProducts] = useState(null)
   const [id, setId] = useState(null)
   const [quantity, setQuantity] = useState('')
-  const restaurantId = useParams();    
-  //const restId = 1
+  const {restaurantId} = useParams();
+  const [selectedProducts, setSelectedProducts ] = useState([])  
 
-  console.log('id',id)
-  console.log('quantity',quantity)
-
-  const login = () => {   
-    const body = {
-      email:"isaac@isaac.com",
-      password: "123456"
-    }
-    api.post('login', body).then((response) => {        
-      window.localStorage.setItem('token', response.data.token)
-      console.log('pegando o token',response)                
-    })
-  }      
-  const restaurantes = () => {
+  console.log('id',restaurantId)
+  console.log('quantity',quantity)     
+ 
+  useEffect(() => {
     api.get(`restaurants`, {
       headers: {
         auth: window.localStorage.getItem('token')
       }
     }).then((response) =>{              
       })
-  }   
-
-  const habbibs = () => {
+  }, [])
+  
+  useEffect(() => {
     api.get(`restaurants/${restaurantId}`, {
       headers: {
         auth: window.localStorage.getItem('token')
@@ -44,32 +42,54 @@ const RestaurantDetailPage =()=>{
         setDetail(response.data.restaurant)
         setProducts(response.data.restaurant.products)
       })
-  }
+  }, [])
+  
   const getId = (event) => {
     event.preventDefault()
     setId(event.target.id)    
   } 
   const quantitySelect = (event) => {
     setQuantity(event.target.value)    
-  }  
+  }
+  const min = 'min.'
+  const frete = 'Frete R$'
+  const principal = 'Principais'  
 
   return(
-    <RestaurantDetailContainer>
-      <h1>Detalhes do Restaurante</h1>
-      <button onClick={login}>Logar</button>
-      <button onClick={restaurantes}>Todos restaurantes</button>
-      <button onClick={habbibs}>Habbibs</button>
-      <DescriptionCard detail={detail}/>
-      <p>Principais</p>
+    <MainWrapper>
+      <DetailContainer>   
+        <Img src={detail !== undefined && detail.logoUrl }  alt='Imagem do Restaurante'/>            
+        <Name>{detail !== undefined && detail.name}</Name>
+        <Category>{detail !== undefined && detail.category}</Category>
+        <DeliveryTime>{detail !== undefined && detail.deliveryTime+`${min}`}</DeliveryTime>
+        <Shipping>{detail !== undefined && `${frete}`+detail.shipping.toFixed(2)}</Shipping>
+        <Address>{detail !== undefined && detail.address}</Address> 
+      <p>{detail !== undefined && `${principal}`}</p>
+      
+      </DetailContainer>
       <hr/>
-      <AllProductContainer>             
+      <div>             
         {
           products !== null &&
-          products.map((products) => {
-          return <CardProduct getQuantity={quantitySelect} getProductId={getId} products={products}/>
+          products.map((product) => {
+          return(
+            <ProductCard
+              src={product.photoUrl}
+              productName={product.name}
+              description={product.description}
+              price={product.price.toFixed(2)}
+              quantity={selectedProducts.quantity} //Ajustar lógica da quantidade 
+              id={product.id}
+              addToCart
+              selectOnChange={quantitySelect} 
+              removeFromCart
+              
+              
+            />
+          )
         })}            
-      </AllProductContainer>
-    </RestaurantDetailContainer>
+      </div>
+    </MainWrapper>
   ) 
 };
 export default RestaurantDetailPage

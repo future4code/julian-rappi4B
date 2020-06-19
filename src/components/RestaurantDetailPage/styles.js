@@ -5,47 +5,46 @@ export const RestaurantDetailContainer = styled.div`
 `
 // Estilização da descrição do restaurante
 
-export const DescriptionCardContainer = styled.div`  
-  display: flex;
-  flex-wrap: wrap;            
+export const DetailContainer = styled.div`  
+  margin:0;
+  padding:0;            
 `
-export const ImgCardDetail = styled.img`
-   flex: 100%;
-   width: 100vw;
+export const Img = styled.img`
+  width: 328px;
+  height: 140px;
   border: 1px solid #ddd;
   border-radius: 10% 10% 0 0;  
 `
-export const Name = styled.h4`
-  flex:100vw;
+export const Name = styled.p`
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;  
+  letter-spacing: -0.39px;
   text-align: left;
-  color: red;
-  font-size: 1.3rem;      
+  color: #e86e5a;
+     
 `
-export const Category = styled.p`
-  flex:100vw;
+export const Category = styled.p`  
   text-align: left;
-  color: #746d65;      
+  color: #b8b8b8;      
 `
 export const DeliveryTime = styled.span`
   flex:1;  
   float: left;  
   text-align: left;
-  color: #746d65;    
+  color: #b8b8b8;    
 `
 export const Shipping = styled.span`
   flex:1;
   display:inline;
+  margin-left: 35px;
   text-align: left;
-  color: #746d65;         
+  color: #b8b8b8;        
 `
-export const Address = styled.p`
-  flex:100vw; 
-  color: #746d65;
-  text-align: left;         
-`
-
-export const AllProductContainer = styled.div`  
- 
+export const Address = styled.p` 
+  color: #b8b8b8;
+  text-align: left;        
 `
 
 // Estilização do Card de Produtos
