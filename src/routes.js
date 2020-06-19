@@ -6,6 +6,7 @@ import SignUpPage from './components/SignUpPage/index';
 import AddreesRegisterPage from './components/AddreesRegisterPage/index';
 
 import HomePage from './components/HomePage/index';
+import CartPage from './components/CartPage'
 
 import RestaurantDetailPage from './components/RestaurantDetailPage/index';
 
@@ -21,6 +22,7 @@ const Routes = ()=>{
         <Route component={SignUpPage} exact path='/cadastrar'/>
         <Route component={AddreesRegisterPage} exact path ='/cadastro-endereco'/>
         <Route component={HomePage} exact path='/home' />
+        <Route component={CartPage} exact path='/cart' />
         <Route component={RestaurantDetailPage} exact path='/restaurant-detail/:restaurantId'/>
         <Route component={ProfilePage} exact path='/perfil'/>
         <Route component={EditAddressPage} exact path='/editar-endereco'/>
