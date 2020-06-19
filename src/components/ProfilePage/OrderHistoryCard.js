@@ -2,7 +2,7 @@ import React from 'react';
 
 import {
     
-} from './styles';
+} from '../rappi4bUi/rappi4bUi';
 
 
 const OrderHistoryCard = (props) =>{

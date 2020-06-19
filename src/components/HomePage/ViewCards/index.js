@@ -1,5 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { RestaurantCard, RestCardWrapper, RestImg, GenText, RestDetails,  } from '../../rappi4bUi/rappi4bUi'
+
 import {
   ViewCardsContent,
   Img,
@@ -13,15 +15,24 @@ const ViewCards = (props) => {
   const history = useHistory();
 
   return (
-    <ViewCardsContent
-      onClick={() => history.push(`/restaurant-detail/${restaurant.id}`)}
-    >
+    <ViewCardsContent>
 
-      <Img src={restaurant.logoUrl} />
-      <Title>{restaurant.name}</Title>
+      <RestCardWrapper
+        onClick={() => history.push(`/restaurant-detail/${restaurant.id}`)}
+      >
 
-      <DeliveryTime>{restaurant.deliveryTime} min.</DeliveryTime>
-      <Shipping>Frete R$ {restaurant.shipping.toFixed(2)}</Shipping>
+        <RestImg src={restaurant.logoUrl} />
+
+        <RestDetails>
+          <GenText salmon>{restaurant.name}</GenText>
+        </RestDetails>
+
+        <RestDetails>
+          <GenText detail>{restaurant.deliveryTime} min.</GenText>
+          <GenText detail>Frete R$ {restaurant.shipping.toFixed(2)}</GenText>
+        </RestDetails>
+
+      </RestCardWrapper>
 
     </ViewCardsContent>
   );

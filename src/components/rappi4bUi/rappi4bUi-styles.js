@@ -79,13 +79,17 @@ export const Text = styled.span`
   font-style: normal;
   line-height: normal;
   letter-spacing: -0.39px;
-  margin: ${props=> props.minor ? '6px 0px':'12px 0px'};
+  margin: ${props=> props.minor ? '6px 0px':'12px 4px'};
   color: ${props =>
     props.salmon && "#e86e5a" ||
     props.detail && "#b8b8b8" ||
     props.white && "#ffffff"||
     "var(--black)"
   };
+  display: ${props => props.sticky && 'sticky'};
+  &:hover {
+    color: ${props => props.hover && '#e86e5a'};
+  }
 `;
 export const HiText = styled.p`
   font-size: ${props=> props.largeIcon ? '32px':'16px'};

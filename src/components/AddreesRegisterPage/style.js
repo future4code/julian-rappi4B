@@ -25,3 +25,7 @@ export const ButtonAddreesRegisterPage = styled.button`
     border: solid 1px #b8b8b8;
 `
 
+export const FormContainer = styled.form`
+
+`
+

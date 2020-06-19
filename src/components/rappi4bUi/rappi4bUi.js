@@ -56,6 +56,8 @@ export const GenInput =(props)=>{
       placeholder={props.placeholder}
       type={props.type} 
       required={props.required === undefined && true}
+      onKeyDown={props.onKeyDown}
+      onClick={props.onClick}
       />
     </InputWrapper> 
   )
@@ -119,9 +121,9 @@ export const ProductCard =(props)=>{
     <ProductCardWrapper>
       <ProductCardImg src={props.src}/>
       <ProductCardDetails>
-        <GenText salmon>{props.productName}</GenText>
+        <GenText minor salmon>{props.productName}</GenText>
         <GenText detail minor>{props.description}</GenText>
-        <GenText>R$ {props.price}</GenText>
+        <GenText minor>R$ {props.price}</GenText>
       </ProductCardDetails>
       <ProductCardActionBar>
         <ProductCardCounter 
