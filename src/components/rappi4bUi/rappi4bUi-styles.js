@@ -38,12 +38,11 @@ export const InputArea = styled.input`
   letter-spacing: -0.39px;
   border: none;
   background: none;
-  
   &:focus{
     outline: none;
   };
   &::placeholder{
-    color: #d0d0d0
+    color: #d0d0d0;
     opacity: 0.2
   };
 `;
@@ -103,10 +102,9 @@ export const HiText = styled.p`
   text-transform: uppercase;
 `;
 export const NavBarWrapper = styled.nav`
-  //border: 1px solid black;
   position: fixed;
   background-color: #ffffff;
-  top: 94.5%;
+  bottom: 0%;
   max-width: 360px;
   max-height: 49px;
   display: grid;
@@ -125,7 +123,11 @@ export const NavBarButton = styled.button`
     outline: none;
   };
 `;
-export const FormWrapper = styled.form` 
+export const FormWrapper = styled.form`
+  display: flex;
+  flex-direction: ${props=> props.row ? 'row':'column'};
+  align-items: center;
+  height: auto;
 `;
 export const RestCardWrapper = styled.article`
   border-radius: 8px;

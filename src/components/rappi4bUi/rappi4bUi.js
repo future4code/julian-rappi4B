@@ -23,23 +23,22 @@ export const AppWrapper = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow-y:auto;
-  overflow-x:hidden;
+  overflow:auto;
 `;
 export const MainWrapper = styled.main`
   width: 360px;
-  height: auto;
+  min-height: 640px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow-y: auto;
-  overflow-x:hidden;
+  overflow-x: hidden;
 `;
 export const GenButton = ButtonWrapper;
 export const GenText = Text;
 export const GenHiText = HiText;
-export const GenForm = FormWrapper;
+export const GenForm = FormWrapper; 
 export const GenInput =(props)=>{
   
   return(
@@ -172,7 +171,7 @@ export const ListenerCard=(props)=>{
   )
 };
 export const RadioInput = (props)=>{
-  const optionsList = props.radioOptions
+  const optionsList = props.radioOptions !== undefined ? props.radioOptions : []
   return(
     <RadioInputWrapper>
       <GenText minor>{props.radioTitle}</GenText>
@@ -181,7 +180,9 @@ export const RadioInput = (props)=>{
         optionsList.map(option=>{
           return(
             <RadioOption>{option}
-              <RadioSelect value={option} onClick={props.onClickOption} type='radio' /> 
+              <RadioSelect 
+              onClick={props.onClickOption}
+              type='radio' /> 
               <RadioMark></RadioMark>
             </RadioOption>
           )
@@ -218,18 +219,21 @@ export const ViewProfileCard=(props)=>{
   )
 };
 export const ViewAdressCard=(props)=>{
-
+  
   return(
     <AddresBox>
       <InfosBox>
-        <GenText minor detail>Endereço cadastrado</GenText>
+        <GenText minor detail>{props.cardTitle}</GenText>
         <GenText>{props.userAddress}</GenText>
       </InfosBox>
-      <EditIconButton 
-      onClick={props.editInfo}
-      >
-        <RiPencilLine/>
-      </EditIconButton>
+      {
+        props.showEditButton !== false &&
+        <EditIconButton 
+        onClick={props.editInfo}
+        >
+          <RiPencilLine/>
+        </EditIconButton>
+      }
     </AddresBox>
   )
 };
