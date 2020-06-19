@@ -6,8 +6,6 @@ import { useHistory } from 'react-router-dom'
 //import Button from '@material-ui/core/Button';
 import { useForm } from '../../hooks/hooks';
 
-
-
 const LoginPage = () => {
   const { form, onChange, resetForm } = useForm({
     email: '',
@@ -74,9 +72,7 @@ const LoginPage = () => {
       <p>Não possui cadastro? <button size='small' onClick={GoToRegisterPage}>Clique Aqui.</button></p>
       </form>
     </ContainerLogin>
-  
-    )
-  
+   )
 };
 
 export default LoginPage

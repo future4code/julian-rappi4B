@@ -16,7 +16,7 @@ import EditProfilePage from './components/EditProfilePage/index';
 const Routes = ()=>{
   return(
      <BrowserRouter>
-      <Switch>
+      <Switch>   
         <Route component={LoginPage} exact path='/'/>
         <Route component={SignUpPage} exact path='/cadastrar'/>
         <Route component={AddreesRegisterPage} exact path ='/cadastro-endereco'/>
@@ -25,9 +25,15 @@ const Routes = ()=>{
         <Route component={ProfilePage} exact path='/perfil'/>
         <Route component={EditAddressPage} exact path='/editar-endereco'/>
         <Route component={EditProfilePage} exact path='/editar-perfil'/>
+        <Route  path='/'>
+        <h1>
+          Opa!
+          <br/> <br/> 
+          Página não encontrada.
+        </h1>
+      </Route>
       </Switch>
     </BrowserRouter> 
   )
 };
-
 export default Routes
