@@ -37,13 +37,13 @@ export const InputArea = styled.input`
   line-height: normal;
   letter-spacing: -0.39px;
   border: none;
-  background: none;
+  background: #fff;
   &:focus{
     outline: none;
   };
   &::placeholder{
-    color: #d0d0d0;
-    opacity: 0.2
+    color: #000;
+    opacity: 0.8
   };
 `;
 export const ButtonWrapper = styled.button`

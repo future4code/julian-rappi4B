@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import api from '../../services/api'
 import { useHistory } from 'react-router-dom';
 
+import {RadioHr} from '../rappi4bUi/rappi4bUi-styles'
 import {
-  OrderHistoryCard, MainWrapper, GenNavBar
+  OrderHistoryCard, MainWrapper, GenNavBar, GenText,
+  ViewProfileCard, ViewAdressCard
 } from '../rappi4bUi/rappi4bUi';
-
-import ProfileCard from './ProfileCard';
-
 
 const ProfilePage = () => {
   let history = useHistory()
@@ -53,15 +52,22 @@ const ProfilePage = () => {
   
   return(
     <MainWrapper>
-      <h3>Meu perfil</h3>
-      
-      {profile !== null && <ProfileCard profile={profile}/>}
-
-      <p>Histórico de compras</p>
-      
+        <ViewProfileCard
+          userName={profile !== null && profile.name}
+          userEmail={profile !== null && profile.email}
+          userCpf={profile !== null && profile.cpf}
+          editInfo={()=>history.push('/editar-perfil')}
+        />
+        <ViewAdressCard 
+          userAddress={profile !== null && profile.address}
+          editInfo ={()=>history.push('/editar-endereco')} 
+        />
+    
+      <GenText>Histórico de pedidos</GenText>
+      <RadioHr/>
       {
       ordersHistory.length === 0 ? 
-        <p>Você não realizou nenhum pedido</p> : 
+        <GenText>Você não realizou nenhum pedido</GenText> : 
         
         ordersHistory.map(order => {
         
@@ -83,6 +89,5 @@ const ProfilePage = () => {
       
     </MainWrapper>
   )
-  
 };
 export default ProfilePage
