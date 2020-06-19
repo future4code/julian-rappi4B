@@ -57,6 +57,8 @@ export const GenInput =(props)=>{
       placeholder={props.placeholder}
       type={props.type} 
       required={props.required === undefined && true}
+      onKeyDown={props.onKeyDown}
+      onClick={props.onClick}
       />
     </InputWrapper> 
   )
