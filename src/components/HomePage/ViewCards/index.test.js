@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import ViewCards from '../index';
 
 test('teste', () => {
     expect(true).toBe(true)

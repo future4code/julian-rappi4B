@@ -34,7 +34,7 @@ const HomePage = () => {
   const Login = () => {
 
     const body = {
-      email: 'venganzakills@gmail.com',
+      email: 'bia@gmail.com',
       password: '123456'
     }
 
