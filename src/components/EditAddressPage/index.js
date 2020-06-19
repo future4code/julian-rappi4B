@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom';
 import api from '../../services/api'
 
 import {
-  EditAddressContainer  
-} from './styles';
+  MainWrapper, GenInput, GenForm, GenButton
+} from '../rappi4bUi/rappi4bUi';
 
 const EditAddressPage =()=>{
   const [infosAddressForm, setInfosAddressForm] = useState(null)
@@ -15,7 +15,6 @@ const EditAddressPage =()=>{
     event.preventDefault()
     api.put('address', infosAddressForm, {headers: {auth: token}})
       .then((response) => {
-        console.log(response)
         window.alert('Dados alterados com sucesso!') 
         history.push('/perfil')
       })  
@@ -38,68 +37,62 @@ const EditAddressPage =()=>{
   let history = useHistory()
       
     return (
-    <EditAddressContainer>
-      <h1>Editar Endereço</h1>
-      <form onSubmit={onClickEditAddres}> 
-        <div>
-          <label>Logradouro:</label>
-          <input                       
-            type="text"     
-            name="street" 
-            value={infosAddressForm !== null ? infosAddressForm.street : ""}
-            onChange={onChangeInputAddress}
-          />
-        </div>
-        <div>
-          <label>Número:</label>
-          <input 
-            type="text" 
-            name="number" 
-            value={infosAddressForm !== null ? infosAddressForm.number : ""}
-            onChange={onChangeInputAddress}
-          />
-        </div>
-        <div>
-          <label>Complemento:</label>
-          <input 
-            type="text" 
-            name="complement" 
-            value={infosAddressForm !== null ? infosAddressForm.complement : ""}
-            onChange={onChangeInputAddress}
-            placeholder="Apto / Bloco"
-          />
-        </div>
-        <div>
-          <label>Bairro:</label>
-          <input 
-            type="text" 
-            name="neighbourhood"
-            value={infosAddressForm !== null ? infosAddressForm.neighbourhood : ""}
-            onChange={onChangeInputAddress}
-          />
-        </div>
-        <div>
-          <label>Cidade:</label>
-          <input 
-            type="text" 
-            name="city"
-            value={infosAddressForm !== null ? infosAddressForm.city : ""}
-            onChange={onChangeInputAddress}
-          />
-        </div>
-        <div>
-          <label>Estado:</label>
-          <input 
-            type="text" 
-            name="state"
-            value={infosAddressForm !== null ? infosAddressForm.state : ""}
-            onChange={onChangeInputAddress}
-          />
-        </div>
+    <MainWrapper>
+      <h3>Endereço</h3>
+      <GenForm onSubmit={onClickEditAddres}> 
+        <GenInput  
+          inputLabel="Logradouro"                     
+          type="text"     
+          name="street" 
+          value={infosAddressForm !== null ? infosAddressForm.street : ""}
+          onChange={onChangeInputAddress}
+        />
 
-        <button>Salvar</button>
-      </form>
-  </EditAddressContainer>
+        <GenInput 
+          inputLabel="Número"                     
+          type="text" 
+          name="number" 
+          value={infosAddressForm !== null ? infosAddressForm.number : ""}
+          onChange={onChangeInputAddress}
+        />
+
+        <GenInput 
+          inputLabel="Complemento"                     
+          type="text" 
+          name="complement" 
+          value={infosAddressForm !== null ? infosAddressForm.complement : ""}
+          onChange={onChangeInputAddress}
+          placeholder="Apto / Bloco"
+        />
+
+        <GenInput 
+          inputLabel="Bairro"                     
+          type="text" 
+          name="neighbourhood"
+          value={infosAddressForm !== null ? infosAddressForm.neighbourhood : ""}
+          onChange={onChangeInputAddress}
+        />
+
+        <GenInput 
+          inputLabel="Cidade"                     
+          type="text" 
+          name="city"
+          value={infosAddressForm !== null ? infosAddressForm.city : ""}
+          onChange={onChangeInputAddress}
+        />
+
+        <GenInput 
+          inputLabel="Estado"                     
+          type="text" 
+          name="state"
+          value={infosAddressForm !== null ? infosAddressForm.state : ""}
+          onChange={onChangeInputAddress}
+        />
+       
+        <GenButton>Salvar</GenButton>
+
+    </GenForm>
+  </MainWrapper>
   
   )
 };

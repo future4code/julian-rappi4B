@@ -3,6 +3,7 @@ import api from '../../services/api'
 import {ContainerAddreesRegisterPage, InputAddreesRegisterPage, ButtonAddreesRegisterPage } from './style'
 import { useForm } from '../../hooks/hooks';
 import { useHistory } from 'react-router-dom'
+import rappi4bUi from '../rappi4bUi/rappi4bUi'
 
 
 const AddreesRegisterPage = () => {

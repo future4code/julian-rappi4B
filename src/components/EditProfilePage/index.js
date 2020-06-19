@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom';
 import api from '../../services/api'
 
 import {
-  EditProfileContainer
-} from './styles';
+  MainWrapper, GenInput, GenButton, GenForm
+} from '../rappi4bUi/rappi4bUi';
 
 const EditProfilePage =()=>{
   const [infosProfile, setInfosProfile] = useState(null)
@@ -38,41 +38,37 @@ const EditProfilePage =()=>{
   
 
   return (
-    <EditProfileContainer>
-      <h1>Editar Perfil</h1>
-      <form onSubmit={onClickEditProfile}>
-        <div>
-            <label>Nome:</label>
-            <input 
-              type="text" 
-              name="name" 
-              value={infosProfile !== null ? infosProfile.name : ""}
-              onChange={onChangeInputProfile}
-            />
-        </div>
-        <div>
-            <label>E-mail:</label>
-            <input   
-              type="email" 
-              name="email" 
-              value={infosProfile !== null ? infosProfile.email : ""}
-              onChange={onChangeInputProfile}
+    <MainWrapper>
+      <h3>Editar</h3>
+      <GenForm onSubmit={onClickEditProfile}>
+        <GenInput 
+          inputLabel="Nome"
+          type="text" 
+          name="name" 
+          value={infosProfile !== null ? infosProfile.name : ""}
+          onChange={onChangeInputProfile}
+        />
 
-            />
-        </div>
-        <div>
-            <label>CPF:</label>
-            <input 
-              type="text" 
-              name="cpf"
-              value={infosProfile !== null ? infosProfile.cpf : ""}
-              onChange={onChangeInputProfile}
+        <GenInput                 
+          inputLabel="E-mail"
+          type="email" 
+          name="email" 
+          value={infosProfile !== null ? infosProfile.email : ""}
+          onChange={onChangeInputProfile}
+        />
 
-            />
-        </div>
-        <button>Salvar</button> 
-      </form>
-    </EditProfileContainer>
+        <GenInput 
+          inputLabel="CPF"
+          type="text" 
+          name="cpf"
+          value={infosProfile !== null ? infosProfile.cpf : ""}
+          onChange={onChangeInputProfile}
+        />
+        
+        <GenButton>Salvar</GenButton>
+         
+      </GenForm>
+    </MainWrapper>
   )
 };
 export default EditProfilePage

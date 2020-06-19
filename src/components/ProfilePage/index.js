@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api'
+import { useHistory } from 'react-router-dom';
 
 import {
-  ProfilePageContainer
-} from './styles';
+  OrderHistoryCard, MainWrapper, GenNavBar
+} from '../rappi4bUi/rappi4bUi';
 
-import OrderHistoryCard from './OrderHistoryCard';
 import ProfileCard from './ProfileCard';
 
 
 const ProfilePage = () => {
+  let history = useHistory()
+
   const [profile, setProfile] = useState(null)
   
   const [ordersHistory, setOrdersHistory] = useState([])
@@ -47,31 +49,39 @@ const ProfilePage = () => {
     }).catch((error) => {
       window.alert('Não conseguimos acessar seu histórico de compras. Tente novamente mais tarde.')
     })
-  })
+  }, [])
   
   return(
-    <ProfilePageContainer>
-      <h1>Meu perfil</h1>
-
+    <MainWrapper>
+      <h3>Meu perfil</h3>
+      
       {profile !== null && <ProfileCard profile={profile}/>}
 
-      <h1>Histórico de compras</h1>
+      <p>Histórico de compras</p>
       
       {
       ordersHistory.length === 0 ? 
         <p>Você não realizou nenhum pedido</p> : 
+        
         ordersHistory.map(order => {
+        
+        const getDate = new Date(order.createdAt).toLocaleDateString()
           return(
             <OrderHistoryCard
               restaurantName={order.restaurantName} 
-              date={order.date}
+              orderDate={getDate}
               totalPrice={order.totalPrice}
             />
           )
         })
-      } 
+      }
+
+      <GenNavBar
+        onClickToHome={()=>history.push('/home')}
+        onClickToCart={()=>history.push('/cart')} 
+      />
       
-    </ProfilePageContainer>
+    </MainWrapper>
   )
   
 };

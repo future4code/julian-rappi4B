@@ -2,8 +2,8 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import {
-    
-  } from './styles';
+    ViewProfileCard, ViewAdressCard, MainWrapper
+  } from '../rappi4bUi/rappi4bUi';
   
 
 const ProfileCard = (props) => {
@@ -12,19 +12,19 @@ const ProfileCard = (props) => {
     const history = useHistory()
 
     return (  
-        <div>
-            <div>
-                <p>{profile.name}</p>
-                <p>{profile.email}</p>
-                <p>{profile.cpf}</p>
-                <button onClick={()=>history.push('/editar-perfil')}>Editar perfil</button>
-            </div>
-            <div>
-                <p>Endereço cadastrado</p>
-                <p>{profile.address}</p>
-                <button onClick={()=>history.push('/editar-endereco')}>Editar endereço</button>
-            </div>
-        </div>
+        <MainWrapper>
+            <ViewProfileCard
+                userName={profile.name}
+                userEmail={profile.email}
+                userCpf={profile.cpf}
+                editInfo={()=>history.push('/editar-perfil')}
+            />
+            <ViewAdressCard 
+                userAddress={profile.address}
+                editInfo ={()=>history.push('/editar-endereco')}
+                
+            />
+        </MainWrapper>
     )
   
 };
