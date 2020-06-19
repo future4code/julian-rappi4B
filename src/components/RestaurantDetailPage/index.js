@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api'
 import { useParams } from 'react-router-dom';
-import { MainWrapper, ProductCard, PopupSelect } from '../rappi4bUi/rappi4bUi';
+import { MainWrapper, ProductCard} from '../rappi4bUi/rappi4bUi';
 import { 
   Img, 
   Name, 
@@ -80,10 +80,9 @@ const RestaurantDetailPage =()=>{
               price={product.price.toFixed(2)}
               quantity={selectedProducts.quantity} //Ajustar lógica da quantidade 
               id={product.id}
-              addToCart
+              addToCart={() => console.log('adicionou ao carrinho')}
               selectOnChange={quantitySelect} 
-              removeFromCart
-              
+              removeFromCart={() => console.log('removeu do carrinho')}              
               
             />
           )
