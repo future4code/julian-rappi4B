@@ -43,8 +43,8 @@ export const InputArea = styled.input`
     outline: none;
   };
   &::placeholder{
-    color: #d0d0d0
-    opacity: 0.2
+    color: #d0d0d0 ;
+    opacity: 0.2 ;
   };
 `;
 export const ButtonWrapper = styled.button`

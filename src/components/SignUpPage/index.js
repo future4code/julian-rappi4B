@@ -1,7 +1,8 @@
 import React from 'react';
 import api from '../../services/api'
 import LogoRappi from '../LogoRappi/title-rappi4.png'
-import { ContainerRegisterPage, InputDados, ButtonRegister} from './style'
+import { MainWrapper, GenInput, GenText, GenForm, GenButton } from '../rappi4bUi/rappi4bUi'
+
 import { useForm } from '../../hooks/hooks';
 import { useHistory } from 'react-router-dom'
 
@@ -42,48 +43,48 @@ const SignUpPage = () =>{
   }
   
   return (
-      <ContainerRegisterPage>
+      <MainWrapper>
           <img src={LogoRappi} />
-          <p>Cadastrar</p>
-      <form onSubmit={goToPrivateArea}>
-        <InputDados 
+          <GenText>Cadastrar</GenText>
+      <GenForm onSubmit={goToPrivateArea}>
+        <GenInput 
           name='name'
           value={name}
-          label={'Nome do cliente'}
+          inputLabel={'Nome'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Nome" 
           required/>   
-        <InputDados     
+        <GenInput     
           name='email'
           value={email}
-          label={'Insira seu email'}
+          inputLabel={'E-mail'}
           onChange={handleInputChange}
           placeholder="E-mail" 
           type='text' 
           required/>              
-        <InputDados 
+        <GenInput 
           name='cpf'
           value={cpf}
-          label={'Insira seu CPF'}
+          inputLabel={'Insira seu CPF'}
           onChange={handleInputChange}
           type='text' 
           placeholder="CPF" 
           required/>      
-        <InputDados 
+        <GenInput 
           name='password'
           value={password}
-          label={'Senha'}
+          inputLabel={'Senha'}
           onChange={handleInputChange}
           type='password' 
           placeholder="Senha" 
           required/>            
-          <ButtonRegister  
+          <GenButton  
            type='submit'>
             Cadastrar
-          </ButtonRegister>
-      </form>    
-      </ContainerRegisterPage>
+          </GenButton>
+      </GenForm>    
+      </MainWrapper>
     )
   
 };
