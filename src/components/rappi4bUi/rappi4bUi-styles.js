@@ -352,3 +352,47 @@ export const RadioMark = styled.span`
 	background: black; 
   };
 `;
+export const OrderHIstoryCardWrapper = styled.article`
+  width: 328px;
+  height: 102px;
+  border-radius: 8px;
+  border: solid 1px #b8b8b8;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 8px 16px;
+  padding: 14px;
+`;
+export const InfosBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+export const EditIconButton=styled.button`
+  font-size: 24px;
+  background: none;
+  border: none;
+  &:focus{
+    outline: none;
+  };
+  &:active{
+    font-size: small;
+    color: #e86e5a;
+  };
+`;
+export const ProfileBox = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+export const AddresBox = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: #eeeeee;
+`;

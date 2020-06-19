@@ -1,6 +1,6 @@
 import React from 'react';
 import Routes from './routes'
-import{AppWrapper} from './components/general/rappi4bUi'
+import{AppWrapper} from './components/rappi4bUi/rappi4bUi'
 function App() {
   return (
     <AppWrapper>

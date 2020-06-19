@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 
-import{RiShoppingCartLine, RiHomeSmileLine, RiUser5Line} from 'react-icons/ri'
+import{RiShoppingCartLine, RiHomeSmileLine, RiUser5Line, RiPencilLine} from 'react-icons/ri'
 import {FaRegClock} from 'react-icons/fa';
 import styled from 'styled-components';
 import {
@@ -11,17 +11,20 @@ import {
   ProductCardCounter, ProductCardActionBar, PopupSelectWrapper,
   Select, PopupSelectButton, Option, PopupSelectShadow, OrderListenerCard,
   ClockView, ActiveOrderDetails, RadioInputWrapper, RadioSelect, RadioOption,
-  RadioMark, RadioHr
+  RadioMark, RadioHr,OrderHIstoryCardWrapper, PersonalInfosCardWrapper, 
+  InfosBox, ProfileBox, AddresBox, EditIconButton
 }from './rappi4bUi-styles'
 
 export const AppWrapper = styled.main`
   margin: 0;
   width: 100vw;
-  height: 100vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-y:auto;
+  overflow-x:hidden;
 `;
 export const MainWrapper = styled.main`
   width: 360px;
@@ -62,9 +65,9 @@ export const GenNavBar =(props)=>{
 
   return(
     <NavBarWrapper>
-      <NavBarButton onClick={props.onClickHome}><RiHomeSmileLine/></NavBarButton>
-      <NavBarButton onClick={props.onClickCart}><RiShoppingCartLine/></NavBarButton>
-      <NavBarButton onClick={props.onClickProfile}><RiUser5Line/></NavBarButton>
+      <NavBarButton onClick={props.onClickToHome}><RiHomeSmileLine/></NavBarButton>
+      <NavBarButton onClick={props.onClickToCart}><RiShoppingCartLine/></NavBarButton>
+      <NavBarButton onClick={props.onClickToProfile}><RiUser5Line/></NavBarButton>
     </NavBarWrapper>
   )
 };
@@ -172,7 +175,7 @@ export const RadioInput = (props)=>{
   const optionsList = props.radioOptions
   return(
     <RadioInputWrapper>
-      <GenText>{props.radioTitle}</GenText>
+      <GenText minor>{props.radioTitle}</GenText>
       <RadioHr/>
       {
         optionsList.map(option=>{
@@ -185,6 +188,49 @@ export const RadioInput = (props)=>{
         })
       }
     </RadioInputWrapper>
+  )
+};
+export const OrderHistoryCard=(props)=>{
+
+  return(
+    <OrderHIstoryCardWrapper>
+      <GenText salmon>{props.restaurantName}</GenText>
+      <GenText minor>{props.orderDate}</GenText>
+      <GenHiText>subtotal r${props.totalPrice}</GenHiText>
+    </OrderHIstoryCardWrapper>
+  )
+};
+export const ViewProfileCard=(props)=>{
+
+  return(
+    <ProfileBox>
+      <InfosBox>
+        <GenText>{props.userName}</GenText>
+        <GenText minor>{props.userEmail}</GenText>
+        <GenText minor>{props.userCpf}</GenText>
+      </InfosBox>
+      <EditIconButton 
+      onClick={props.editInfo}
+      >
+        <RiPencilLine/>
+      </EditIconButton>
+    </ProfileBox>
+  )
+};
+export const ViewAdressCard=(props)=>{
+
+  return(
+    <AddresBox>
+      <InfosBox>
+        <GenText minor detail>Endereço cadastrado</GenText>
+        <GenText>{props.userAddress}</GenText>
+      </InfosBox>
+      <EditIconButton 
+      onClick={props.editInfo}
+      >
+        <RiPencilLine/>
+      </EditIconButton>
+    </AddresBox>
   )
 };
 

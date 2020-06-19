@@ -3,19 +3,18 @@ import {useHistory} from 'react-router-dom'
 import{
   MainWrapper, GenInput, GenButton, GenText,
   GenHiText, GenNavBar, GenForm, RestaurantCard,
-  ProductCard, ListenerCard, RadioInput
+  ProductCard, ListenerCard, RadioInput, OrderHistoryCard,
+  ViewProfileCard, ViewAdressCard
 }from './rappi4bUi';
 
 const TestComponents =()=>{
-  const h = useHistory()
+  const h = useHistory();
 
   const [selValue, setSelValue] = useState(0);
 
   const handleSelectOption = (e)=>{
     setSelValue(e.target.value)
-  }
-  console.log(selValue)
-  
+  };
   const addToCart=()=>{
     console.log('adicionado ao carrinho')
   };
@@ -24,15 +23,36 @@ const TestComponents =()=>{
     setSelValue(0)
   };
   const onClickRadio = (e)=> console.log(e.target.value);
+  const onClickEdit = ()=> console.log('editando informação');
+
   return (
     <MainWrapper>
+      
+      <ViewProfileCard
+      userName={'Bruna Oliveira'}
+      userEmail={'bruna@gmail.com'}
+      userCpf={'333.333.333-33'}
+      editInfo={onClickEdit}
+      />
 
-     <RadioInput
-     radioTitle={'Forma de pagamento'}
-     radioOptions={['a prazo', 'a vista']}
-     onClickOption={onClickRadio}
-     />
-      {/* <ProductCard
+      <ViewAdressCard
+      userAddress={`Rua da Guia, 72 - Recife/PE`}
+      editInfo={onClickEdit}
+      />
+      
+      <OrderHistoryCard
+      restaurantName={'Nome do Restaurante'}
+      orderDate={'24 de outubro de 2019'}
+      totalPrice={24}
+      />
+
+      <RadioInput
+      radioTitle={'Forma de pagamento'}
+      radioOptions={['a prazo', 'a vista', 'no boleto']}
+      onClickOption={onClickRadio}
+      />
+
+      <ProductCard
       src={'https://static-images.ifood.com.br/image/upload/f_auto,t_high/pratos/d596c695-8f68-4ebf-9e09-da6e4e9d1672/201909301542_8HZD_n.png'}
       productName={'McFlurry Ovomaltine'}
       description={'McFlurry on the rocks!'}
@@ -43,14 +63,7 @@ const TestComponents =()=>{
       selectOnChange={handleSelectOption}
       removeFromCart={removeFromCart}
       />
-      <RestaurantCard
-      src={'http://soter.ninja/futureFoods/logos/mcdonalds.png'}
-      restaurantName={'MacDonalds'}
-      deliveryTime={60}
-      shipping={8}
-      openDetails={()=> console.log('abriu detalhes do restaurante')}
-      /> */}
-
+      
       <GenText salmon >Cadastrar</GenText>
       <GenForm>
         <GenInput
