@@ -1,13 +1,13 @@
 import React from 'react';
 import api from '../../services/api'
-import {ContainerAddreesRegisterPage, InputAddreesRegisterPage, ButtonAddreesRegisterPage } from './style'
+import { MainWrapper, GenInput, GenForm, GenButton } from '../rappi4bUi/rappi4bUi'
 import { useForm } from '../../hooks/hooks';
 import { useHistory } from 'react-router-dom'
 import rappi4bUi from '../rappi4bUi/rappi4bUi'
 
 
 const AddreesRegisterPage = () => {
-  const { form, onChange, resetForm } = useForm({
+  const { form, onChange } = useForm({
     street: '',
     number:'',
     neighbourhood:'',
@@ -45,59 +45,59 @@ const AddreesRegisterPage = () => {
     })
 }
   return (
-    <ContainerAddreesRegisterPage>
-      <form onSubmit={AddreesRegister}>
-        <InputAddreesRegisterPage 
+    <MainWrapper>
+      <GenForm onSubmit={AddreesRegister}>
+        <GenInput 
           name='street'
           value={street}
-          label={'rua do cliente'}
+          inputLabel={'rua do cliente'}
           type='text' 
           onChange={handleInputChange}
           placeholder="Nome" 
           required/>   
-        <InputAddreesRegisterPage 
+        <GenInput 
           name='number'
           value={number}
-          label={'numero do endereco'}
+          inputLabel={'numero do endereco'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Número" 
           required/>   
-        <InputAddreesRegisterPage 
+        <GenInput 
           name='neighbourhood'
           value={neighbourhood}
-          label={'bairro'}
+          inputLabel={'bairro'}
           type='text' 
           onChange={handleInputChange}
           placeholder="Bairro" 
           required/>   
-        <InputAddreesRegisterPage 
+        <GenInput 
           name='city'
           value={city}
-          label={'cidade'}
+          inputLabel={'cidade'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Cidade" 
           required/>   
-        <InputAddreesRegisterPage 
+        <GenInput 
           name='state'
           value={state}
-          label={'estado'}
+          inputLabel={'estado'}
           onChange={handleInputChange}
           type='text' 
           placeholder="state" 
           required/>
-          <InputAddreesRegisterPage 
+          <GenInput 
           name='complement'
           value={complement}
-          label={'complemento'}
+          inputLabel={'complemento'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Complemento" 
           required/>   
-          <ButtonAddreesRegisterPage type='submit'>Salvar</ButtonAddreesRegisterPage>
-        </form>
-       </ContainerAddreesRegisterPage>
+          <GenButton type='submit'>Salvar</GenButton>
+        </GenForm>
+       </MainWrapper>
   )
 
 };

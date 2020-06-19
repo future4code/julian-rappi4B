@@ -1,9 +1,9 @@
 import React from 'react';
 import api from '../../services/api'
 import LogoRappi from '../LogoRappi/title-rappi4.png'
-import { ContainerLogin, InputLogin, InputButton } from './style'
+import { InputButton } from './style'
+import { MainWrapper, GenInput, GenText, GenForm, GenButton, InputLabel } from '../rappi4bUi/rappi4bUi'
 import { useHistory } from 'react-router-dom'
-//import Button from '@material-ui/core/Button';
 import { useForm } from '../../hooks/hooks';
 
 const LoginPage = () => {
@@ -44,34 +44,34 @@ const LoginPage = () => {
   
  
   return (
-    <ContainerLogin>
+    <MainWrapper>
       <img src={LogoRappi} />
-      <p>Entrar</p>
-        <form onSubmit={goToPrivateArea}>
-          <InputLogin  
+      <GenText>Entrar</GenText>
+        <GenForm onSubmit={goToPrivateArea}>
+          <GenInput  
             name='email'
             value={email}
-            label={'E-mail'}
+            inputLabel={'E-mail'}
             onChange={handleInputChange}
             type='email'
             placeholder="E-mail" 
             required/>
             
-          <InputLogin 
+          <GenInput 
             name='password'
             value={password}
-            label={'Senha'}
+            inputLabel={'Senha'}
             onChange={handleInputChange}
             type='password' 
             placeholder="Senha" 
             required/>            
-        <InputButton 
+        <GenButton 
            type='submit' 
            >Entrar
-        </InputButton>
-      <p>Não possui cadastro? <button size='small' onClick={GoToRegisterPage}>Clique Aqui.</button></p>
-      </form>
-    </ContainerLogin>
+        </GenButton> 
+      </GenForm>
+      <GenText>Não possui cadastro? <InputButton size='small' onClick={GoToRegisterPage}>Clique Aqui.</InputButton></GenText>
+    </MainWrapper>
    )
 };
 
