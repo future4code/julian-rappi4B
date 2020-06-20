@@ -73,12 +73,12 @@ export const ButtonWrapper = styled.button`
   }
 `;
 export const Text = styled.span`
-  font-size: ${props=> props.minor ? '14px':'16px'};
+  font-size: ${props=> props.minor ? '14px':'15px'};
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
-  letter-spacing: -0.39px;
+  letter-spacing: -0.6px;
   margin: ${props=> props.minor ? '6px 0px':'12px 4px'};
   color: ${props =>
     props.salmon && "#e86e5a" ||
@@ -291,6 +291,7 @@ export const OrderListenerCard = styled.article`
   flex-direction: row;
   justify-content: space-between;
   border-top: 1px solid #b8b8b8;
+  padding-bottom: 10px;
 `;
 export const ClockView = styled.div`
   width: 80px;

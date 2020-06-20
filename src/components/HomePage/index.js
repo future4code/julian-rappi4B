@@ -13,25 +13,17 @@ import {
 
 import {
   CategoriesList,
-  MainWrapper2,
-  OrderInfo
+  MainWrapper2
 } from './styles';
 
 const HomePage = () => {
   const [inputValue, setInputValue] = useState('');
-  const [searchList, setSearchList] = useState([]);
   const [displayRestaurants, setDisplayRestaurants] = useState('ALL');
+  const [searchList, setSearchList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [restaurantsList, setRestaurantsList] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-  const [activeOrder, setActiveOrder] = useState([
-    {
-          totalPrice: 122.69999999999999,
-          restaurantName: "Habibs",
-          createdAt: 1592597161886,
-          expiresAt: 1592600761886
-  }
-  ]);
+  const [activeOrder, setActiveOrder] = useState(null);
 
   const history = useHistory();
 
@@ -79,7 +71,7 @@ const HomePage = () => {
     setInputValue(e.target.value);
   }
 
-  //TODO-- refinar logica -- função da barra de busca, que retorna o texto que o usuário digitou no input
+  //TODO -- função da barra de busca, que retorna o texto que o usuário digitou no input
   const filteredByText = () => {
     const filter = restaurantsList.filter((restaurant) => {
       return restaurant.name.toLowerCase().includes(inputValue, 0)
@@ -87,11 +79,6 @@ const HomePage = () => {
 
     setSearchList(filter);
   }
-
-  //TODO -- função que mostra os pedidos em andamento
-  // const activeOrder = () => {
-    
-  // }
 
   //função side-effect que retorna os dados atualizados dos restaurantes, buscados pelo endpoint Get Restaurants
   useEffect(() => {
@@ -131,15 +118,15 @@ const HomePage = () => {
         auth: localStorage.getItem('token')
       }
     })
-    .then(response => {
-      setActiveOrder(response.data)
-    })
-    .catch(err => {
-      console.error(err)
-    });
+      .then(response => {
+        setActiveOrder(response.data.order)
+      })
+      .catch(err => {
+        console.error(err)
+      });
 
   }, [])
-
+  console.log(activeOrder);
   return (
     <MainWrapper>
 
@@ -213,11 +200,13 @@ const HomePage = () => {
           })
         }
 
+        {
+          activeOrder !== null &&
           <ListenerCard
-            // id={}
-            // restaurantName={restaurant.restaurantName}
-            // totalPrice={restaurant.totalPrice.toFixed(2)}
+            restaurantName={activeOrder.restaurantName}
+            totalPrice={activeOrder.totalPrice.toFixed(2)}
           />
+        }
 
       </MainWrapper2>
 

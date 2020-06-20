@@ -7,7 +7,7 @@ import { useForm } from '../../hooks/hooks';
 import { useHistory } from 'react-router-dom'
 
 
-const SignUpPage = () =>{
+const SignUpPage = () => {
   const { form, onChange, resetForm } = useForm({
     clientname: '',
     email: '',
@@ -17,7 +17,7 @@ const SignUpPage = () =>{
 
   });
 
-  const { name, email, password, cpf } = form;
+  const { name, email, password, cpf, confirmPassword } = form;
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -28,64 +28,86 @@ const SignUpPage = () =>{
   const history = useHistory();
 
   const goToPrivateArea = (event) => {
-    const body = { name, email, password, cpf }
+    const body = { name, email, password, cpf, confirmPassword }
     event.preventDefault();
     api.post('signup', body)
-    .then(response => {
-      window.localStorage.setItem('token', response.data.token);
-      history.push('/cadastro-endereco');
-      resetForm();
-    })
-    .catch(err => {
-      console.error(err);
-      window.alert('Não foi possível realizar seu cadastro')
-    })
+      .then(response => {
+        window.localStorage.setItem('token', response.data.token);
+        history.push('/cadastro-endereco');
+        resetForm();
+      })
+      .catch(err => {
+        console.error(err);
+        window.alert('Não foi possível realizar seu cadastro')
+      })
   }
-  
+
   return (
-      <MainWrapper>
-          <img src={LogoRappi} />
-          <GenText>Cadastrar</GenText>
+    <MainWrapper>
+      <img src={LogoRappi} />
+      <GenText>Cadastrar</GenText>
       <GenForm onSubmit={goToPrivateArea}>
-        <GenInput 
+        <GenInput
           name='name'
           value={name}
-          inputLabel={'Nome'}
+          inputLabel={'Nome *'}
           onChange={handleInputChange}
-          type='text' 
-          placeholder="Nome" 
-          required/>   
-        <GenInput     
+          type='text'
+          placeholder="Nome e sobrenome"
+          pattern="[A-Za-z]{3,}"
+          title="O nome deve conter 3 letras no mínimo."
+          required
+        />
+        <GenInput
           name='email'
           value={email}
-          inputLabel={'E-mail'}
+          inputLabel={'E-mail *'}
           onChange={handleInputChange}
-          placeholder="E-mail" 
-          type='text' 
-          required/>              
-        <GenInput 
+          placeholder="e-mail@email.com"
+          type='text'
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+          title="O e-mail deve obedecer o formato exigido."
+          required
+        />
+        <GenInput
           name='cpf'
           value={cpf}
-          inputLabel={'Insira seu CPF'}
+          inputLabel={'CPF *'}
           onChange={handleInputChange}
-          type='text' 
-          placeholder="CPF" 
-          required/>      
-        <GenInput 
+          type='text'
+          placeholder="000.000.000-00"
+          pattern="^\d{3}\.\d{3}\.\d{3}\-\d{2}$"
+          title="O CPF deve obedecer o formato exigido."
+          required
+        />
+        <GenInput
           name='password'
           value={password}
-          inputLabel={'Senha'}
+          inputLabel={'Senha *'}
           onChange={handleInputChange}
-          type='password' 
-          placeholder="Senha" 
-          required/>            
-          <GenButton  
-           type='submit'>
-            Cadastrar
-          </GenButton>
-      </GenForm>    
-      </MainWrapper>
-    )
-  
+          type='password'
+          placeholder="Mínimo 6 caracteres"
+          pattern="[0-9a-zA-Z]{6,}"
+          title="A senha deve conter no mínimo 6 caracteres."
+          required
+        />
+
+        <GenInput
+          name='confirmPassword'
+          value={confirmPassword}
+          inputLabel={'Confirmar *'}
+          onChange={handleInputChange}
+          type='password'
+          placeholder="Confirme a senha anterior"
+          pattern="[0-9a-zA-Z]{6,}"
+          title="A senha deve conter no mínimo 6 caracteres."
+          required
+        />
+
+        <GenButton type='submit'>Cadastrar</GenButton>
+      </GenForm>
+    </MainWrapper>
+  )
+
 };
 export default SignUpPage

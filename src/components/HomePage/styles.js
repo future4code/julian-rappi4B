@@ -8,6 +8,7 @@ export const CategoriesList = styled.div`
      width: 100%;
      height: auto;
      justify-content: space-around;
+     white-space: nowrap;
 `
 
 export const MainWrapper2 = styled.main`
@@ -15,8 +16,8 @@ export const MainWrapper2 = styled.main`
   min-height: 640px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  //overflow-y: auto;
-  //overflow-x: hidden;
+  align-items: flex-start;
+  justify-content: start;
+  // overflow-y: auto;
+  // overflow-x: hidden;
 `
