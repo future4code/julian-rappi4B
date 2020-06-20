@@ -49,15 +49,15 @@ const AddreesRegisterPage = () => {
         <GenInput 
           name='street'
           value={street}
-          inputLabel={'rua do cliente'}
+          inputLabel={'Rua/Avenida'}
           type='text' 
           onChange={handleInputChange}
-          placeholder="Nome" 
+          placeholder="Rua/Avenida" 
           required/>   
         <GenInput 
           name='number'
           value={number}
-          inputLabel={'numero do endereco'}
+          inputLabel={'Número do endereco'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Número" 
@@ -65,7 +65,7 @@ const AddreesRegisterPage = () => {
         <GenInput 
           name='neighbourhood'
           value={neighbourhood}
-          inputLabel={'bairro'}
+          inputLabel={'Bairro'}
           type='text' 
           onChange={handleInputChange}
           placeholder="Bairro" 
@@ -73,7 +73,7 @@ const AddreesRegisterPage = () => {
         <GenInput 
           name='city'
           value={city}
-          inputLabel={'cidade'}
+          inputLabel={'Cidade'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Cidade" 
@@ -81,7 +81,7 @@ const AddreesRegisterPage = () => {
         <GenInput 
           name='state'
           value={state}
-          inputLabel={'estado'}
+          inputLabel={'Estado'}
           onChange={handleInputChange}
           type='text' 
           placeholder="state" 
@@ -89,7 +89,7 @@ const AddreesRegisterPage = () => {
           <GenInput 
           name='complement'
           value={complement}
-          inputLabel={'complemento'}
+          inputLabel={'Complemento'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Complemento" 
