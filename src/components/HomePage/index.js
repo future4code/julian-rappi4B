@@ -7,11 +7,14 @@ import {
   GenInput,
   GenText,
   RestaurantCard,
-  GenNavBar
+  GenNavBar,
+  ListenerCard
 } from '../rappi4bUi/rappi4bUi';
 
 import {
   CategoriesList,
+  MainWrapper2,
+  OrderInfo
 } from './styles';
 
 const HomePage = () => {
@@ -21,7 +24,14 @@ const HomePage = () => {
   const [categoryList, setCategoryList] = useState([]);
   const [restaurantsList, setRestaurantsList] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-  const [activeOrder, setActiveOrder] = useState([]);
+  const [activeOrder, setActiveOrder] = useState([
+    {
+          totalPrice: 122.69999999999999,
+          restaurantName: "Habibs",
+          createdAt: 1592597161886,
+          expiresAt: 1592600761886
+  }
+  ]);
 
   const history = useHistory();
 
@@ -158,7 +168,7 @@ const HomePage = () => {
         })}
       </CategoriesList>
 
-      <MainWrapper>
+      <MainWrapper2>
         {
           displayRestaurants === 'CATEGORY' &&
           filteredRestaurants.map((restaurant) => {
@@ -203,7 +213,13 @@ const HomePage = () => {
           })
         }
 
-      </MainWrapper>
+          <ListenerCard
+            // id={}
+            // restaurantName={restaurant.restaurantName}
+            // totalPrice={restaurant.totalPrice.toFixed(2)}
+          />
+
+      </MainWrapper2>
 
       <GenNavBar
         onClickToHome={() => history.push('/home')}
