@@ -14,7 +14,7 @@ export const useForm = (initialValues) => {
   }
 
   return { form, onChange, resetForm }
-}
+};
 
 export const usePrivatePage = () => {
 
@@ -27,4 +27,4 @@ export const usePrivatePage = () => {
       history.push('/');
     }
   }, [history]);
-}
+};
