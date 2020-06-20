@@ -3,6 +3,7 @@ import api from '../../services/api'
 import { useHistory } from 'react-router-dom';
 
 import {RadioHr} from '../rappi4bUi/rappi4bUi-styles'
+import {HistoryWrapper} from './styles';
 import {
   OrderHistoryCard, MainWrapper, GenNavBar, GenText,
   ViewProfileCard, ViewAdressCard
@@ -65,23 +66,26 @@ const ProfilePage = () => {
     
       <GenText>Histórico de pedidos</GenText>
       <RadioHr/>
-      {
-      ordersHistory.length === 0 ? 
-        <GenText>Você não realizou nenhum pedido</GenText> : 
-        
-        ordersHistory.map(order => {
-        
-        const getDate = new Date(order.createdAt).toLocaleDateString()
-          return(
-            <OrderHistoryCard
-              restaurantName={order.restaurantName} 
-              orderDate={getDate}
-              totalPrice={order.totalPrice}
-            />
-          )
-        })
-      }
-
+      
+      <HistoryWrapper>
+        {
+        ordersHistory.length === 0 ? 
+          <GenText>Você não realizou nenhum pedido</GenText> : 
+          
+          ordersHistory.map(order => {
+          
+          const getDate = new Date(order.createdAt).toLocaleDateString()
+            return(
+              <OrderHistoryCard
+                restaurantName={order.restaurantName} 
+                orderDate={getDate}
+                totalPrice={order.totalPrice}
+              />
+            )
+          })
+        }
+      </HistoryWrapper>
+      
       <GenNavBar
         onClickToHome={()=>history.push('/home')}
         onClickToCart={()=>history.push('/cart')} 
