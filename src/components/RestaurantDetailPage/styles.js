@@ -6,46 +6,27 @@ export const RestaurantDetailContainer = styled.div`
 // Estilização da descrição do restaurante
 
 export const DetailContainer = styled.div`  
-  margin:0;
-  padding:0;            
+  margin:16px;
+  padding:0;
+  height: 246px;
+  width: 328px;
+  display: flex;
+  flex-direction: column;
+  
 `
 export const Img = styled.img`
-  width: 328px;
-  height: 140px;
+  width: 100%;
+  max-height: 120px;
   border: 1px solid #ddd;
-  border-radius: 10% 10% 0 0;  
+  border-radius: 10px 10px 0 0;  
 `
-export const Name = styled.p`
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;  
-  letter-spacing: -0.39px;
-  text-align: left;
-  color: #e86e5a;
-     
-`
-export const Category = styled.p`  
-  text-align: left;
-  color: #b8b8b8;      
-`
-export const DeliveryTime = styled.span`
-  flex:1;  
-  float: left;  
-  text-align: left;
-  color: #b8b8b8;    
-`
-export const Shipping = styled.span`
-  flex:1;
-  display:inline;
-  margin-left: 35px;
-  text-align: left;
-  color: #b8b8b8;        
-`
-export const Address = styled.p` 
-  color: #b8b8b8;
-  text-align: left;        
-`
+export const DeliveryInfos = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 208px;
+  height: auto;
+`;
 
 // Estilização do Card de Produtos
 

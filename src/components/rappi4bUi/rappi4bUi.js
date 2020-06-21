@@ -89,31 +89,30 @@ export const RestaurantCard =(props)=>{
 };
 
 export const ProductCard =(props)=>{
-  const [addedToCart, setAddedToCart] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(props.quantity ? true : false);
   const [showSelect, setShowSelect] = useState(false);
-  const [quantity, setQuantity] = useState(0);
-
-  const optionsList=[0,1,2,3,4,5,6,7,8,9,10]
+  const [quantity, setQuantity] = useState( props.quantity ? Number(props.quantity) : 0);
+ 
+  const optionsList=[0,1,2,3,4,5,6,7,8,9,10];
  
   const callBackAddToCart=(event)=>{
     const addToCart = props.addToCart;
     addToCart(event);
-    setAddedToCart(true);
+    setQuantity(event.target.value);
     setShowSelect(false);
   };
 
   const handleQuantitySelected = (event) => {
-    const selectOnChange = props.selectOnChange
-    setQuantity(event.target.value)
-    selectOnChange(event);
-  }
+    setQuantity(event.target.value);
+  };
 
   const callBackRemoveFromCart =(event)=>{
     const removeFromCart = props.removeFromCart;
     setQuantity(0)
     removeFromCart(event);
-    setAddedToCart(false);
   };
+
+  //console.log(props.)
   return(
     <ProductCardWrapper>
       <ProductCardImg src={props.src}/>
@@ -128,16 +127,22 @@ export const ProductCard =(props)=>{
         >
           <GenText>{quantity}</GenText>
         </ProductCardCounter>
-        <ProductCardAddButton
-        id={props.id} 
-        remove={addedToCart}
-        onClick={
-          addedToCart === false ? 
-          () => setShowSelect(true) : callBackRemoveFromCart
+        {
+          props.hiddeActionButton === undefined &&
+          <ProductCardAddButton
+          id={props.id} 
+          quantity={quantity}
+          onClick={
+            quantity === 0 ? 
+            () => setShowSelect(true) : callBackRemoveFromCart
+          }
+          >
+            {
+            quantity === 0 ? 'Adicionar' : 'Remover'
+            }
+          </ProductCardAddButton>
         }
-        >
-          {addedToCart === false ? 'Adicionar' : 'Remover'}
-        </ProductCardAddButton>
+        
       </ProductCardActionBar>
       {
         showSelect === true &&
@@ -147,7 +152,17 @@ export const ProductCard =(props)=>{
               <Select onChange={handleQuantitySelected} autoFocus>
                 {optionsList.map(option=><Option value={option}>{option}</Option>)}
               </Select>
-            <PopupSelectButton id={props.id} value={quantity} onClick={callBackAddToCart}>Adicionar ao carrinho</PopupSelectButton>
+            <PopupSelectButton 
+            id={props.id} value={quantity} 
+            onClick={callBackAddToCart}
+            >
+              Adicionar ao carrinho
+            </PopupSelectButton>
+            <PopupSelectButton 
+            onClick={()=> { setQuantity(0); setShowSelect(false)}}
+            >
+              Cancelar
+            </PopupSelectButton>
           </PopupSelectWrapper>
         </PopupSelectShadow>        
       }
@@ -180,8 +195,9 @@ export const RadioInput = (props)=>{
       {
         optionsList.map(option=>{
           return(
-            <RadioOption>{option}
+            <RadioOption key={option}>{option}
               <RadioSelect 
+              value={option}
               onClick={props.onClickOption}
               type='radio' /> 
               <RadioMark></RadioMark>
@@ -238,5 +254,3 @@ export const ViewAdressCard=(props)=>{
     </AddresBox>
   )
 };
-
-
