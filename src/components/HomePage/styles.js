@@ -18,6 +18,6 @@ export const MainWrapper2 = styled.main`
   flex-direction: column;
   align-items: flex-start;
   justify-content: start;
-  // overflow-y: auto;
-  // overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 `
