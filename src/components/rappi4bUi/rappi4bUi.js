@@ -22,11 +22,12 @@ export const AppWrapper = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   overflow:auto;
 `;
 export const MainWrapper = styled.main`
   width: 360px;
-  height: auto;
+  min-height: 640px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,8 +110,6 @@ export const ProductCard =(props)=>{
     setQuantity(0)
     removeFromCart(event);
   };
-
-  //console.log(props.)
   return(
     <ProductCardWrapper>
       <ProductCardImg src={props.src}/>
@@ -195,7 +194,9 @@ export const RadioInput = (props)=>{
           return(
             <RadioOption key={option}>{option}
               <RadioSelect 
-              value={option}
+              value={
+                option.toLowerCase().includes('dinheiro') ? 'money' : 'creditcard'
+              }
               onClick={props.onClickOption}
               type='radio' /> 
               <RadioMark></RadioMark>

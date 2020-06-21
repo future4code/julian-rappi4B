@@ -26,8 +26,8 @@ const CartPage =()=>{
   const cartContext = useContext(CartContext);
   const restaurantsListContext = useContext(RestaurantsListContex);
 
-  const [userCart, setUserCart] = useState([]);
-  const [currentOrder, setCurrentOrder]=useState(null);
+  const [userOrder, setUserOrder] = useState([]);
+  const [paymentMethod, setPaymentMethod]=useState('');
   const [activeOrderRestaurants, setActiveOrderRestaurants] = useState([]);
   const [totalShipping, setTotalShipping] = useState(0);
 
@@ -35,62 +35,77 @@ const CartPage =()=>{
   const handleClearCart = ()=>{
     const confirm = window.confirm('Deseja esvaziar seu carrinho?')
     confirm === true &&
-    setUserCart([]);   
+    setUserOrder([]);   
     cartContext.dispatch({
       type: 'REMOVE_FROM_CART', filteredCart:[]
     });  
   };
-  const handleSelectPayment=(e)=> setCurrentOrder(
-    {...currentOrder, paymentMethod: e.target.value}
-  );
-  const handleConfirmOrder=async()=> {
-    const extractedIdCart = userCart.map(product=>{
-      return {id: product.product.id, quantity: product.quantity}
-    })
-    setCurrentOrder({...currentOrder, products: extractedIdCart})
+  const handleSelectPayment=(e)=> setPaymentMethod(e.target.value);
 
-  
-      /* activeOrderRestaurants.forEach(restaurant=>{
-        try{
-          api.post(`restaurants/${restaurant.id}/order`, )
-        }catch(e){
-          console.log(e.response.data)
+  const handleConfirmOrder=async()=> {
+    const sendOrder=async()=>{
+      if(window.confirm('Confirmar informações do pedido?') === true){
+        const globalCart = cartContext.userCart;
+        for(let restaurantWithOrder in globalCart){
+          const extractedIdOrder = globalCart[restaurantWithOrder].map(product=>{
+            return {id: product.product.id, quantity: product.quantity}
+          })
+          const requestBody = {products: extractedIdOrder, paymentMethod: paymentMethod}
+          try{
+            window.alert('Aguarde enquanto confirmamos seu pedido...')
+            const response = await api.post(`restaurants/${restaurantWithOrder}/order`, requestBody, {headers:{
+              auth: localStorage.getItem('token')
+            }});
+            window.alert(`Pedido no restaurante ${response.data.order.restaurantName} realizado!`)
+          }catch(e){
+            window.alert(
+              `${e.response.data.message}. Não é permitido mais de um pedido de restaurante por vez.`
+            );
+          }
         }
-      })
-    window.alert('Aguarde enquanto processamos seu pedido...') */
+      }else{window.alert('Pedido cancelado.')}
+    };
+
+    userOrder.length === 0 ? window.alert('Seu carrinho está vazio!') :
+    paymentMethod === '' ? window.alert('Selecione uma forma de pagamento!') :
+    sendOrder();
   };
   const cartSum=()=>{
     let subtotal = 0;
-    userCart.forEach(product=>{
+    userOrder.forEach(product=>{
       subtotal += product.product.price*product.quantity
     });
     return (subtotal+totalShipping).toFixed(2)
   };
-
-  useEffect(()=>{
-    userCart.length < cartContext.userCart.cart.length &&
-    setUserCart(cartContext.userCart.cart)
-  },[]);
   useEffect(()=>{
     let shippingCounter = 0;
-    const currentRestaurantsIds = [];
-    cartContext.userCart.cart.forEach(product=>{
-      ! currentRestaurantsIds.includes(product.restaurantId) && 
-      currentRestaurantsIds.push(product.restaurantId)
+    const awaitingProducts = [];
+
+    const activeOrderRestaurantsIds =()=>{
+      const ids = [];
+      for(let order in cartContext.userCart){
+        ids.push(order)
+      };
+      return ids
+    };
+    const currentRestaurantsWithOrders = 
+    restaurantsListContext.restaurantsList.filter(restaurant=>{
+      return activeOrderRestaurantsIds().includes(restaurant.id)
     });
-    const currentRestaurants = restaurantsListContext.restaurantsList.filter(restaurant=>{
-      return currentRestaurantsIds.includes(restaurant.id)
-    });
-    currentRestaurants.forEach(restaurant=>{
+    for(let restaurantWithOrder in cartContext.userCart){
+      cartContext.userCart[restaurantWithOrder].forEach(product=>{
+        awaitingProducts.push(product)
+      });
+    };
+    currentRestaurantsWithOrders.forEach(restaurant=>{
       shippingCounter += restaurant.shipping
     });
 
-    setActiveOrderRestaurants(currentRestaurants);
+    setUserOrder(awaitingProducts);
+    setActiveOrderRestaurants(currentRestaurantsWithOrders);
     setTotalShipping(shippingCounter);
   },[])
 
-  console.log(userCart)
-  
   return(
     <MainWrapper>
       <ViewAdressCard
@@ -119,8 +134,8 @@ const CartPage =()=>{
 
       <CartProductsView>
         {
-          userCart.length > 0 ?
-          userCart.map(selectedProduct =>{
+          userOrder.length > 0 ?
+          userOrder.map(selectedProduct =>{
             return(
               <ProductCard 
               src={selectedProduct.product.photoUrl}
@@ -138,7 +153,7 @@ const CartPage =()=>{
       </CartProductsView>
 
       {
-      userCart.length > 0 &&
+      userOrder.length > 0 &&
         <GenText salmon onClick={handleClearCart}>Esvaziar carrinho</GenText>
       }
       <ShippingInfo>
@@ -151,7 +166,7 @@ const CartPage =()=>{
         <GenText>SUBTOTAL</GenText>
         <GenHiText salmon>
           r${
-            userCart.length > 0 ?
+            userOrder.length > 0 ?
             cartSum()
             : '00.00'
           }
