@@ -87,34 +87,31 @@ export const RestaurantCard =(props)=>{
     </RestCardWrapper>
   )
 };
-export const PopupSelect = (props)=>{
-  return(
-    <PopupSelectShadow>
-       <PopupSelectWrapper>
-        <GenText>{props.dialogText}</GenText>
-          <Select onChange={props.selectQuantity} autoFocus>
-            {props.optionsList.map(option=><Option value={option}>{option}</Option>)}
-          </Select>
-        <PopupSelectButton onClick={props.addQuantityToCart}>{props.buttonText}</PopupSelectButton>
-      </PopupSelectWrapper>
-    </PopupSelectShadow>
-  )
-};
+
 export const ProductCard =(props)=>{
   const [addedToCart, setAddedToCart] = useState(false);
   const [showSelect, setShowSelect] = useState(false);
-  const callBackAddToCart =()=>{
-    const callBackFromCart = props.addToCart;
-    callBackFromCart();
-    setShowSelect(true);
-  };
-  const callBackSetQuantity=()=>{
+  const [quantity, setQuantity] = useState(0);
+
+  const optionsList=[0,1,2,3,4,5,6,7,8,9,10]
+ 
+  const callBackAddToCart=(event)=>{
+    const addToCart = props.addToCart;
+    addToCart(event);
     setAddedToCart(true);
     setShowSelect(false);
   };
-  const callBackRemoveFromCart =()=>{
-    const callBackFromCart = props.removeFromCart;
-    callBackFromCart();
+
+  const handleQuantitySelected = (event) => {
+    const selectOnChange = props.selectOnChange
+    setQuantity(event.target.value)
+    selectOnChange(event);
+  }
+
+  const callBackRemoveFromCart =(event)=>{
+    const removeFromCart = props.removeFromCart;
+    setQuantity(0)
+    removeFromCart(event);
     setAddedToCart(false);
   };
   return(
@@ -127,16 +124,16 @@ export const ProductCard =(props)=>{
       </ProductCardDetails>
       <ProductCardActionBar>
         <ProductCardCounter 
-        quantity={props.quantity} 
+        quantity={quantity} 
         >
-          <GenText>{props.quantity}</GenText>
+          <GenText>{quantity}</GenText>
         </ProductCardCounter>
         <ProductCardAddButton
         id={props.id} 
         remove={addedToCart}
         onClick={
           addedToCart === false ? 
-          callBackAddToCart : callBackRemoveFromCart
+          () => setShowSelect(true) : callBackRemoveFromCart
         }
         >
           {addedToCart === false ? 'Adicionar' : 'Remover'}
@@ -144,13 +141,15 @@ export const ProductCard =(props)=>{
       </ProductCardActionBar>
       {
         showSelect === true &&
-        <PopupSelect
-        dialogText='Selecione a quantidade desejada'
-        optionsList={[0,1,2,3,4,5,6,7,8,9,10]}
-        buttonText='Adicionar ao carrinho'
-        selectQuantity={props.selectOnChange}
-        addQuantityToCart={callBackSetQuantity}
-        />
+        <PopupSelectShadow>
+          <PopupSelectWrapper>
+            <GenText>Selecione a quantidade desejada</GenText>
+              <Select onChange={handleQuantitySelected} autoFocus>
+                {optionsList.map(option=><Option value={option}>{option}</Option>)}
+              </Select>
+            <PopupSelectButton id={props.id} value={quantity} onClick={callBackAddToCart}>Adicionar ao carrinho</PopupSelectButton>
+          </PopupSelectWrapper>
+        </PopupSelectShadow>        
       }
     </ProductCardWrapper>
   )

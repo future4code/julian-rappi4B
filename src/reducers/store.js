@@ -12,6 +12,9 @@ export const storeReducer=(state, action)=>{
     case 'ADD_TO_CART':
       let product = action.product;
       return {...state, userCart:[...state.userCart, product]};
+    case 'REMOVE_FROM_CART':
+      let filteredCart = action.filteredCart;
+      return {...state, userCart:filteredCart}  
 
     case 'SET_USER_INFOS':
       let infos = action.infos;
