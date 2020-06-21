@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import RestaurantsListContext from '../../contexts/RestaurantsListContext';
 import { useHistory } from 'react-router-dom';
 import api from '../../services/api';
 
@@ -24,6 +25,8 @@ const HomePage = () => {
   const [restaurantsList, setRestaurantsList] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [activeOrder, setActiveOrder] = useState(null);
+
+  const restaurantsListContext = useContext(RestaurantsListContext);
 
   const history = useHistory();
 
@@ -85,20 +88,26 @@ const HomePage = () => {
 
     Login();
 
-    api.get('restaurants', {
-      headers: {
-        auth: localStorage.getItem('token')
-      }
-    })
-      .then(response => {
-        setRestaurantsList(response.data.restaurants)
+    if(restaurantsListContext.restaurantsList.length === 0) {
+      api.get('restaurants', {
+        headers: {
+          auth: localStorage.getItem('token')
+        }
       })
-      .catch(err => {
-        console.error(err)
-      });
+        .then(response => {
+          setRestaurantsList(response.data.restaurants)
+          restaurantsListContext.dispatch({ type: 'SET_RESTAURANTS_LIST', restaurantsList: response.data.restaurants })
+        })
+        .catch(err => {
+          console.error(err)
+        });
+    }
+    else {
+      setRestaurantsList(restaurantsListContext.restaurantsList)
+    }
 
   }, []);
-
+  
   //função side-effect que 'seta' no estado a lista de categorias filtrada
   useEffect(() => {
     let categories
@@ -126,7 +135,7 @@ const HomePage = () => {
       });
 
   }, [])
-  console.log(activeOrder);
+
   return (
     <MainWrapper>
 
