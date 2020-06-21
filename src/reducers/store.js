@@ -4,6 +4,7 @@
 export const initialState = {
   userCart:{cart:[], cartSum:0},
   userInfos:{},
+  restaurantsList: []
 };
 //Global-state: 3º - criar o reducer
 export const storeReducer=(state, action)=>{
@@ -34,6 +35,10 @@ export const storeReducer=(state, action)=>{
     case 'SET_USER_INFOS':
       let infos = action.infos;
       return {...state, userInfos: infos};
+
+    case 'SET_RESTAURANTS_LIST':
+      let restaurantsList = action.restaurantsList;
+      return {...state, restaurantsList: restaurantsList};
 
     default:
       return state;

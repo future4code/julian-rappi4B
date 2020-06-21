@@ -2,6 +2,7 @@ import React, {useReducer} from 'react';//Global-state: 5º- importar o useReduc
 
 //Global-state: 6º- importar os contexts
 import CartContext from './contexts/CartContext';
+import RestaurantsListContext from './contexts/RestaurantsListContext';
 
 //Global-state: 7º- importar o reducer e o initialState
 import {storeReducer, initialState} from './reducers/store'
@@ -15,11 +16,13 @@ function App() {
 
   return (
     /* Global-state: 9º- envolver os componentes e as rotas com contexts */
-    <CartContext.Provider value={{ userCart: state.userCart, dispatch: dispatch }}>
-      <AppWrapper>
-        <Routes/>
-      </AppWrapper>
-    </CartContext.Provider>
+    <RestaurantsListContext.Provider value={{ restaurantsList: state.restaurantsList, dispatch: dispatch }}>
+      <CartContext.Provider value={{ userCart: state.userCart, dispatch: dispatch }}>
+        <AppWrapper>
+          <Routes/>
+        </AppWrapper>
+      </CartContext.Provider>
+    </RestaurantsListContext.Provider>
   );
 }
 export default App;
