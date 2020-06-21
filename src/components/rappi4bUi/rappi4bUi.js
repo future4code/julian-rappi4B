@@ -89,7 +89,6 @@ export const RestaurantCard =(props)=>{
 };
 
 export const ProductCard =(props)=>{
-  const [addedToCart, setAddedToCart] = useState(props.quantity ? true : false);
   const [showSelect, setShowSelect] = useState(false);
   const [quantity, setQuantity] = useState( props.quantity ? Number(props.quantity) : 0);
  
@@ -111,8 +110,6 @@ export const ProductCard =(props)=>{
     setQuantity(0)
     removeFromCart(event);
   };
-
-  //console.log(props.)
   return(
     <ProductCardWrapper>
       <ProductCardImg src={props.src}/>
@@ -197,7 +194,9 @@ export const RadioInput = (props)=>{
           return(
             <RadioOption key={option}>{option}
               <RadioSelect 
-              value={option}
+              value={
+                option.toLowerCase().includes('dinheiro') ? 'money' : 'creditcard'
+              }
               onClick={props.onClickOption}
               type='radio' /> 
               <RadioMark></RadioMark>

@@ -21,19 +21,36 @@ const RestaurantDetailPage =()=>{
   const history = useHistory();
     
   const getSelectedProduct = (event) => {
-    const productId = event.target.id
-    const productQuantity = event.target.value
+    const productId = event.target.id;
+    const productQuantity = event.target.value;
     const filteredProduct = products.filter(product => {
       return product.id === productId
-    })
-    cartContext.dispatch({ 
-      type: 'ADD_TO_CART', product:{
-        product:filteredProduct[0],
-        quantity: productQuantity
+    });
+    const validedOrder =()=>{
+      if(
+        cartContext.userCart[restaurantId]!== undefined && 
+        cartContext.userCart[restaurantId].length > 0
+        ){
+          return {
+            restaurantId: Number(restaurantId),
+            currentOrder:[
+              ...cartContext.userCart[restaurantId],{
+              product:filteredProduct[0],quantity: productQuantity
+            }]
+          };
+      }else{
+        return {
+          restaurantId: Number(restaurantId),
+          currentOrder:[{
+            product:filteredProduct[0],quantity: productQuantity
+          }]
+        };
       }
+    };
+    cartContext.dispatch({ 
+      type: 'ADD_TO_CART', order: validedOrder()
     });    
   };
-
   const removeProduct = (event) => {
     const productId = event.target.id   
     const filteredSelectedProducts = cartContext.userCart.cart.filter(selectedProduct => {      
@@ -54,8 +71,6 @@ const RestaurantDetailPage =()=>{
         setProducts(response.data.restaurant.products)
       })
   }, []); 
-
-  console.log(detail)
  
   return(
     <MainWrapper>

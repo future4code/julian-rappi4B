@@ -3,7 +3,9 @@ import React, {useState, useContext, useEffect} from 'react';
 
 //Global-state: 11º- importar o context que deseja usar do global state
 import CartContext from '../../contexts/CartContext';
+import RestaurantsListContex from '../../contexts/RestaurantsListContext';
 
+import api from '../../services/api';
 import {useHistory} from 'react-router-dom';
 
 import {
@@ -22,43 +24,88 @@ const CartPage =()=>{
 
   //Global-state: 12º- instanciar o useContext com o context importado e ter acesso global state
   const cartContext = useContext(CartContext);
+  const restaurantsListContext = useContext(RestaurantsListContex);
 
-  const [userCart, setUserCart] = useState([]);
-  const [currentOrder, setCurrentOrder]=useState(null);
-  
+  const [userOrder, setUserOrder] = useState([]);
+  const [paymentMethod, setPaymentMethod]=useState('');
+  const [activeOrderRestaurants, setActiveOrderRestaurants] = useState([]);
+  const [totalShipping, setTotalShipping] = useState(0);
+
   //Global-state: 13º- utilizar alguma das actions setadas no switch do storeReducer
   const handleClearCart = ()=>{
     const confirm = window.confirm('Deseja esvaziar seu carrinho?')
     confirm === true &&
-    setUserCart([]);   
+    setUserOrder([]);   
     cartContext.dispatch({
       type: 'REMOVE_FROM_CART', filteredCart:[]
     });  
   };
-  const handleSelectPayment=(e)=> setCurrentOrder(
-    {...currentOrder, paymentMethod: e.target.value}
-  );
-  const handleConfirmOrder=()=> {
-    const extractedIdCart = userCart.map(product=>{
-      return {id: product.product.id, quantity: product.quantity}
-    })
-    setCurrentOrder({...currentOrder, products: extractedIdCart})
-}
-  
+  const handleSelectPayment=(e)=> setPaymentMethod(e.target.value);
+
+  const handleConfirmOrder=async()=> {
+    const sendOrder=async()=>{
+      if(window.confirm('Confirmar informações do pedido?') === true){
+        const globalCart = cartContext.userCart;
+        for(let restaurantWithOrder in globalCart){
+          const extractedIdOrder = globalCart[restaurantWithOrder].map(product=>{
+            return {id: product.product.id, quantity: product.quantity}
+          })
+          const requestBody = {products: extractedIdOrder, paymentMethod: paymentMethod}
+          try{
+            window.alert('Aguarde enquanto confirmamos seu pedido...')
+            const response = await api.post(`restaurants/${restaurantWithOrder}/order`, requestBody, {headers:{
+              auth: localStorage.getItem('token')
+            }});
+            window.alert(`Pedido no restaurante ${response.data.order.restaurantName} realizado!`)
+          }catch(e){
+            window.alert(
+              `${e.response.data.message}. Não é permitido mais de um pedido de restaurante por vez.`
+            );
+          }
+        }
+      }else{window.alert('Pedido cancelado.')}
+    };
+
+    userOrder.length === 0 ? window.alert('Seu carrinho está vazio!') :
+    paymentMethod === '' ? window.alert('Selecione uma forma de pagamento!') :
+    sendOrder();
+  };
   const cartSum=()=>{
     let subtotal = 0;
-    userCart.forEach(product=>{
+    userOrder.forEach(product=>{
       subtotal += product.product.price*product.quantity
     });
-    return subtotal.toFixed(2)
+    return (subtotal+totalShipping).toFixed(2)
   };
-
   useEffect(()=>{
-    userCart.length < cartContext.userCart.cart.length &&
-    setUserCart(cartContext.userCart.cart)
+    let shippingCounter = 0;
+    const awaitingProducts = [];
+
+    const activeOrderRestaurantsIds =()=>{
+      const ids = [];
+      for(let order in cartContext.userCart){
+        ids.push(order)
+      };
+      return ids
+    };
+    const currentRestaurantsWithOrders = 
+    restaurantsListContext.restaurantsList.filter(restaurant=>{
+      return activeOrderRestaurantsIds().includes(restaurant.id)
+    });
+    for(let restaurantWithOrder in cartContext.userCart){
+      cartContext.userCart[restaurantWithOrder].forEach(product=>{
+        awaitingProducts.push(product)
+      });
+    };
+    currentRestaurantsWithOrders.forEach(restaurant=>{
+      shippingCounter += restaurant.shipping
+    });
+
+    setUserOrder(awaitingProducts);
+    setActiveOrderRestaurants(currentRestaurantsWithOrders);
+    setTotalShipping(shippingCounter);
   },[])
 
-  console.log(currentOrder)
   return(
     <MainWrapper>
       <ViewAdressCard
@@ -68,16 +115,27 @@ const CartPage =()=>{
       />
 
       <RestaurantInfos>
-        <GenText salmon>Restaurant name</GenText>
-        <GenText detail>Restaurant address</GenText>
-        <GenText detail>Restaurant deliveryTime</GenText>
+        <GenText salmon minor>
+          {activeOrderRestaurants.map(restaurant=>{
+            return `${restaurant.name}/ `
+          })}
+        </GenText>
+        <GenText detail minor>
+          {activeOrderRestaurants.map(restaurant=>{
+            return `${restaurant.address}/ `
+          })}
+        </GenText>
+        <GenText detail minor>
+          {activeOrderRestaurants.map(restaurant=>{
+            return `${restaurant.name}, ${restaurant.deliveryTime}min/ `
+          })}
+        </GenText>
       </RestaurantInfos>
 
       <CartProductsView>
         {
-          userCart.length > 0 ?
-          userCart.map(selectedProduct =>{
-            console.log(selectedProduct.quantity)
+          userOrder.length > 0 ?
+          userOrder.map(selectedProduct =>{
             return(
               <ProductCard 
               src={selectedProduct.product.photoUrl}
@@ -95,20 +153,22 @@ const CartPage =()=>{
       </CartProductsView>
 
       {
-      userCart.length > 0 &&
+      userOrder.length > 0 &&
         <GenText salmon onClick={handleClearCart}>Esvaziar carrinho</GenText>
       }
       <ShippingInfo>
-        <GenText>Frete R$ 6.00</GenText>
+        <GenText>
+          Frete R$ {totalShipping.toFixed(2)}
+        </GenText>
       </ShippingInfo>
 
       <PriceInfo>
         <GenText>SUBTOTAL</GenText>
         <GenHiText salmon>
           r${
-            userCart.length > 0 ?
+            userOrder.length > 0 ?
             cartSum()
-            : 0
+            : '00.00'
           }
         </GenHiText>
       </PriceInfo>
