@@ -3,7 +3,9 @@ import React, {useState, useContext, useEffect} from 'react';
 
 //Global-state: 11º- importar o context que deseja usar do global state
 import CartContext from '../../contexts/CartContext';
+import RestaurantsListContex from '../../contexts/RestaurantsListContext';
 
+import api from '../../services/api';
 import {useHistory} from 'react-router-dom';
 
 import {
@@ -22,10 +24,13 @@ const CartPage =()=>{
 
   //Global-state: 12º- instanciar o useContext com o context importado e ter acesso global state
   const cartContext = useContext(CartContext);
+  const restaurantsListContext = useContext(RestaurantsListContex);
 
   const [userCart, setUserCart] = useState([]);
   const [currentOrder, setCurrentOrder]=useState(null);
-  
+  const [activeOrderRestaurants, setActiveOrderRestaurants] = useState([]);
+  const [totalShipping, setTotalShipping] = useState(0);
+
   //Global-state: 13º- utilizar alguma das actions setadas no switch do storeReducer
   const handleClearCart = ()=>{
     const confirm = window.confirm('Deseja esvaziar seu carrinho?')
@@ -38,27 +43,54 @@ const CartPage =()=>{
   const handleSelectPayment=(e)=> setCurrentOrder(
     {...currentOrder, paymentMethod: e.target.value}
   );
-  const handleConfirmOrder=()=> {
+  const handleConfirmOrder=async()=> {
     const extractedIdCart = userCart.map(product=>{
       return {id: product.product.id, quantity: product.quantity}
     })
     setCurrentOrder({...currentOrder, products: extractedIdCart})
-}
+
   
+      /* activeOrderRestaurants.forEach(restaurant=>{
+        try{
+          api.post(`restaurants/${restaurant.id}/order`, )
+        }catch(e){
+          console.log(e.response.data)
+        }
+      })
+    window.alert('Aguarde enquanto processamos seu pedido...') */
+  };
   const cartSum=()=>{
     let subtotal = 0;
     userCart.forEach(product=>{
       subtotal += product.product.price*product.quantity
     });
-    return subtotal.toFixed(2)
+    return (subtotal+totalShipping).toFixed(2)
   };
 
   useEffect(()=>{
     userCart.length < cartContext.userCart.cart.length &&
     setUserCart(cartContext.userCart.cart)
+  },[]);
+  useEffect(()=>{
+    let shippingCounter = 0;
+    const currentRestaurantsIds = [];
+    cartContext.userCart.cart.forEach(product=>{
+      ! currentRestaurantsIds.includes(product.restaurantId) && 
+      currentRestaurantsIds.push(product.restaurantId)
+    });
+    const currentRestaurants = restaurantsListContext.restaurantsList.filter(restaurant=>{
+      return currentRestaurantsIds.includes(restaurant.id)
+    });
+    currentRestaurants.forEach(restaurant=>{
+      shippingCounter += restaurant.shipping
+    });
+
+    setActiveOrderRestaurants(currentRestaurants);
+    setTotalShipping(shippingCounter);
   },[])
 
-  console.log(currentOrder)
+  console.log(userCart)
+  
   return(
     <MainWrapper>
       <ViewAdressCard
@@ -68,16 +100,27 @@ const CartPage =()=>{
       />
 
       <RestaurantInfos>
-        <GenText salmon>Restaurant name</GenText>
-        <GenText detail>Restaurant address</GenText>
-        <GenText detail>Restaurant deliveryTime</GenText>
+        <GenText salmon minor>
+          {activeOrderRestaurants.map(restaurant=>{
+            return `${restaurant.name}/ `
+          })}
+        </GenText>
+        <GenText detail minor>
+          {activeOrderRestaurants.map(restaurant=>{
+            return `${restaurant.address}/ `
+          })}
+        </GenText>
+        <GenText detail minor>
+          {activeOrderRestaurants.map(restaurant=>{
+            return `${restaurant.name}, ${restaurant.deliveryTime}min/ `
+          })}
+        </GenText>
       </RestaurantInfos>
 
       <CartProductsView>
         {
           userCart.length > 0 ?
           userCart.map(selectedProduct =>{
-            console.log(selectedProduct.quantity)
             return(
               <ProductCard 
               src={selectedProduct.product.photoUrl}
@@ -99,7 +142,9 @@ const CartPage =()=>{
         <GenText salmon onClick={handleClearCart}>Esvaziar carrinho</GenText>
       }
       <ShippingInfo>
-        <GenText>Frete R$ 6.00</GenText>
+        <GenText>
+          Frete R$ {totalShipping.toFixed(2)}
+        </GenText>
       </ShippingInfo>
 
       <PriceInfo>
@@ -108,7 +153,7 @@ const CartPage =()=>{
           r${
             userCart.length > 0 ?
             cartSum()
-            : 0
+            : '00.00'
           }
         </GenHiText>
       </PriceInfo>

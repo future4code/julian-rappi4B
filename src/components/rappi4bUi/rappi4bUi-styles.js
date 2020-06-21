@@ -47,6 +47,8 @@ export const InputArea = styled.input`
   };
 `;
 export const ButtonWrapper = styled.button`
+  display: sticky;
+  
   width: 328px;
   height: 42px;
   border: none;
@@ -170,6 +172,7 @@ export const ProductCardWrapper = styled.article`
 export const ProductCardImg = styled.img`
   min-width: 97px;
   height: 112px;
+  border-radius: 8px 0 0 8px;
 `;
 export const ProductCardDetails = styled.div`
   width: 231px;

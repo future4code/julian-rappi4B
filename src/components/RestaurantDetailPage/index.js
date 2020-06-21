@@ -29,7 +29,8 @@ const RestaurantDetailPage =()=>{
     cartContext.dispatch({ 
       type: 'ADD_TO_CART', product:{
         product:filteredProduct[0],
-        quantity: productQuantity
+        quantity: productQuantity,
+        restaurantId: restaurantId
       }
     });    
   };
@@ -54,8 +55,6 @@ const RestaurantDetailPage =()=>{
         setProducts(response.data.restaurant.products)
       })
   }, []); 
-
-  console.log(detail)
  
   return(
     <MainWrapper>

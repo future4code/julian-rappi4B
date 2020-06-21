@@ -22,12 +22,11 @@ export const AppWrapper = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   overflow:auto;
 `;
 export const MainWrapper = styled.main`
   width: 360px;
-  min-height: 640px;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,7 +88,6 @@ export const RestaurantCard =(props)=>{
 };
 
 export const ProductCard =(props)=>{
-  const [addedToCart, setAddedToCart] = useState(props.quantity ? true : false);
   const [showSelect, setShowSelect] = useState(false);
   const [quantity, setQuantity] = useState( props.quantity ? Number(props.quantity) : 0);
  
