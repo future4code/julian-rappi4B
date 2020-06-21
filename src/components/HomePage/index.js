@@ -71,7 +71,7 @@ const HomePage = () => {
     setInputValue(e.target.value);
   }
 
-  //TODO -- função da barra de busca, que retorna o texto que o usuário digitou no input
+  //função da barra de busca, que retorna o texto que o usuário digitou no input
   const filteredByText = () => {
     const filter = restaurantsList.filter((restaurant) => {
       return restaurant.name.toLowerCase().includes(inputValue, 0)
@@ -126,7 +126,7 @@ const HomePage = () => {
       });
 
   }, [])
-  console.log(activeOrder);
+
   return (
     <MainWrapper>
 
