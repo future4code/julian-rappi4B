@@ -3,10 +3,8 @@ import api from '../../services/api'
 import { MainWrapper, GenInput, GenForm, GenButton } from '../rappi4bUi/rappi4bUi'
 import { useForm } from '../../hooks/hooks';
 import { useHistory } from 'react-router-dom'
-import rappi4bUi from '../rappi4bUi/rappi4bUi'
 
-
-const AddreesRegisterPage = () => {
+const AddressRegisterPage = () => {
   const { form, onChange } = useForm({
     street: '',
     number:'',
@@ -22,13 +20,11 @@ const AddreesRegisterPage = () => {
     onChange(name, value);
   }
 
-  
-
   const history = useHistory();
   
   const { street, number, neighbourhood, city, state, complement } = form
 
-  const AddreesRegister = (event) => {
+  const AddressRegister = (event) => {
     event.preventDefault()
     const token = window.localStorage.getItem('token'); 
     const body = { street, number, neighbourhood, city, state, complement }
@@ -44,61 +40,69 @@ const AddreesRegisterPage = () => {
       window.alert('Não foi possível realizar seu cadastro')
     })
 }
+
   return (
     <MainWrapper>
-      <GenForm onSubmit={AddreesRegister}>
+      <GenForm onSubmit={AddressRegister}>
         <GenInput 
           name='street'
           value={street}
-          inputLabel={'rua do cliente'}
+          inputLabel={'Logradouro *'}
           type='text' 
           onChange={handleInputChange}
-          placeholder="Nome" 
-          required/>   
+          placeholder="Rua/Av." 
+          required
+        />   
         <GenInput 
           name='number'
           value={number}
-          inputLabel={'numero do endereco'}
+          inputLabel={'Número *'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Número" 
-          required/>   
+          required
+        />
+        <GenInput 
+          name='complement'
+          value={complement}
+          inputLabel={'Complemento *'}
+          onChange={handleInputChange}
+          type='text' 
+          placeholder="Apto./Bloco" 
+          required
+        />   
         <GenInput 
           name='neighbourhood'
           value={neighbourhood}
-          inputLabel={'bairro'}
+          inputLabel={'Bairro *'}
           type='text' 
           onChange={handleInputChange}
           placeholder="Bairro" 
-          required/>   
+          required
+        />
         <GenInput 
           name='city'
           value={city}
-          inputLabel={'cidade'}
+          inputLabel={'Cidade *'}
           onChange={handleInputChange}
           type='text' 
           placeholder="Cidade" 
-          required/>   
+          required
+        />   
         <GenInput 
           name='state'
           value={state}
-          inputLabel={'estado'}
+          inputLabel={'Estado *'}
           onChange={handleInputChange}
           type='text' 
-          placeholder="state" 
-          required/>
-          <GenInput 
-          name='complement'
-          value={complement}
-          inputLabel={'complemento'}
-          onChange={handleInputChange}
-          type='text' 
-          placeholder="Complemento" 
-          required/>   
+          placeholder="Estado" 
+          required
+        /> 
           <GenButton type='submit'>Salvar</GenButton>
         </GenForm>
        </MainWrapper>
   )
 
 };
-export default AddreesRegisterPage
+
+export default AddressRegisterPage

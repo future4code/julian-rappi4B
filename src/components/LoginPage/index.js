@@ -32,7 +32,6 @@ const LoginPage = () => {
       resetForm();
     })
     .catch(error => {
-      console.log(error);
       window.alert('Não foi possível acessar')
     })
   }
@@ -42,7 +41,6 @@ const LoginPage = () => {
 
   }
   
- 
   return (
     <MainWrapper>
       <img src={LogoRappi} />
@@ -51,26 +49,26 @@ const LoginPage = () => {
           <GenInput  
             name='email'
             value={email}
-            inputLabel={'E-mail'}
+            inputLabel={'E-mail *'}
             onChange={handleInputChange}
             type='email'
-            placeholder="E-mail" 
+            placeholder="e-mail@email.com" 
             required/>
             
           <GenInput 
             name='password'
             value={password}
-            inputLabel={'Senha'}
+            inputLabel={'Senha *'}
             onChange={handleInputChange}
             type='password' 
-            placeholder="Senha" 
+            placeholder="Mínimo 6 caracteres" 
             required/>            
         <GenButton 
            type='submit' 
            >Entrar
         </GenButton> 
       </GenForm>
-      <GenText>Não possui cadastro? <InputButton size='small' onClick={GoToRegisterPage}>Clique Aqui.</InputButton></GenText>
+      <GenText>Não possui cadastro? <InputButton size='small' onClick={GoToRegisterPage}><i>Clique aqui.</i></InputButton></GenText>
     </MainWrapper>
    )
 };
