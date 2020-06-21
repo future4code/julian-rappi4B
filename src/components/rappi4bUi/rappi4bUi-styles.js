@@ -78,6 +78,7 @@ export const Text = styled.span`
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
+  align-self: ${props => props.alignSelfStart && 'flex-start'};
   letter-spacing: -0.6px;
   margin: ${props=> props.minor ? '6px 0px':'12px 4px'};
   color: ${props =>
@@ -146,9 +147,8 @@ export const RestCardWrapper = styled.article`
   justify-content: center;
 `;
 export const RestImg = styled.img`
-  width:328px;
+  min-width:328px;
   height: 120px;
-  object-fit: contain;
 `;
 export const RestDetails = styled.div`
   width: 296px;
@@ -168,9 +168,8 @@ export const ProductCardWrapper = styled.article`
   margin-top:8px;
 `;
 export const ProductCardImg = styled.img`
-  width: 97px;
+  min-width: 97px;
   height: 112px;
-  object-fit: contain;
 `;
 export const ProductCardDetails = styled.div`
   width: 231px;
@@ -189,12 +188,12 @@ export const ProductCardAddButton = styled.button`
   width: 90px;
   height: 31px;
   background: none;
-  border: 1px solid ${props=> props.remove === true ? '#e86e5a' : 'black'};
+  border: 1px solid ${props=> props.quantity > 0 ? '#e86e5a' : 'black'};
   border-bottom-right-radius: 8px;
   border-top-left-radius: 8px;
   font-size: 12px;
   text-transform: lowercase;
-  color: ${props=> props.remove === true ? '#e86e5a' : 'black'};
+  color: ${props=> props.quantity > 0 ? '#e86e5a' : 'black'};
   &:active{
     background: #eeeeee;
     font-size: xx-small;

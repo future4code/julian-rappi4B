@@ -3,13 +3,10 @@ import CartContext from '../../contexts/CartContext';
 import api from '../../services/api'
 import { useParams, useHistory } from 'react-router-dom';
 import { MainWrapper, ProductCard, GenText} from '../rappi4bUi/rappi4bUi';
+import {RadioHr} from '../rappi4bUi/rappi4bUi-styles';
 import { 
   Img, 
-  Name, 
-  Category, 
-  DeliveryTime,
-  Shipping,
-  Address,
+  DeliveryInfos,
   DetailContainer
 } from './styles';
 
@@ -35,18 +32,17 @@ const RestaurantDetailPage =()=>{
         quantity: productQuantity
       }
     });    
-  }
+  };
 
   const removeProduct = (event) => {
-    const productId = event.target.id
-    const userCart = cartContext.userCart    
-    const filteredSelectedProducts = userCart.filter(selectedProduct => {      
+    const productId = event.target.id   
+    const filteredSelectedProducts = cartContext.userCart.cart.filter(selectedProduct => {      
       return selectedProduct.product.id !== productId
     })   
     cartContext.dispatch({
       type: 'REMOVE_FROM_CART', filteredCart:filteredSelectedProducts
     })   
-  } 
+  }; 
 
   useEffect(() => {
     api.get(`restaurants/${restaurantId}`, {
@@ -57,22 +53,30 @@ const RestaurantDetailPage =()=>{
         setDetail(response.data.restaurant)
         setProducts(response.data.restaurant.products)
       })
-  }, []) 
+  }, []); 
+
+  console.log(detail)
  
   return(
     <MainWrapper>
-      <DetailContainer>   
-        <Img src={detail !== undefined && detail.logoUrl }  alt='Imagem do Restaurante'/>            
-        <Name>{detail !== undefined && detail.name}</Name>
-        <Category>{detail !== undefined && detail.category}</Category>
-        <DeliveryTime>{detail !== undefined && `${detail.deliveryTime}min`}</DeliveryTime>
-        <Shipping>{detail !== undefined && `Frete R$${detail.shipping.toFixed(2)}`}</Shipping>
-        <Address>{detail !== undefined && detail.address}</Address>      
+      <DetailContainer>
+        <Img src={detail !== undefined && detail.logoUrl }/>            
+        <GenText salmon>{detail !== undefined && detail.name}</GenText>
+        <GenText detail minor>{detail !== undefined && detail.category}</GenText>
+        <DeliveryInfos>
+          <GenText detail minor>{detail !== undefined && `${detail.deliveryTime}min`}</GenText>
+          <GenText detail minor>{detail !== undefined && `Frete R$${detail.shipping.toFixed(2)}`}</GenText>
+        </DeliveryInfos>
+        <GenText detail minor>{detail !== undefined && detail.address}</GenText>     
       </DetailContainer>
+
       <GenText  onClick={() => history.goBack()} salmon>Voltar</GenText>
-      <GenText>{detail !== undefined && `Principal`}</GenText>
-      <hr/>
-      <div>             
+      
+      <GenText alignSelfStart>{detail !== undefined && `Cardápio`}</GenText>
+
+      <RadioHr/>
+      
+      <MainWrapper>             
         {
           products !== null &&
           products.map((product) => {
@@ -89,7 +93,7 @@ const RestaurantDetailPage =()=>{
             )
           })
         }
-      </div>
+      </MainWrapper>
     </MainWrapper>
   ) 
 };

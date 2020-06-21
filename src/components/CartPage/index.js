@@ -1,5 +1,5 @@
 //Global-state: 10º- para usar o global state nos componentes filhos, importar o useContext
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 
 //Global-state: 11º- importar o context que deseja usar do global state
 import CartContext from '../../contexts/CartContext';
@@ -13,7 +13,7 @@ import {
 
 import {
   MainWrapper, GenNavBar, ViewAdressCard,
-  RadioInput, GenButton, GenForm, ProductCard,
+  RadioInput, GenButton, ProductCard,
   GenText, GenHiText
 } from '../rappi4bUi/rappi4bUi';
 
@@ -21,27 +21,44 @@ const CartPage =()=>{
   const history = useHistory();
 
   //Global-state: 12º- instanciar o useContext com o context importado e ter acesso global state
-  const cartContex = useContext(CartContext);
+  const cartContext = useContext(CartContext);
 
-  const [cartProducts, setCartProducts] = useState(
-    [{
-      src:'https://static-images.ifood.com.br/image/upload/f_auto,t_high/pratos/d596c695-8f68-4ebf-9e09-da6e4e9d1672/201909301542_8HZD_n.png',
-      productName:'McFlurry Ovomaltine',
-      description:'McFlurry on the rocks!',
-      price:6,
-      quantity:3,
-      id:2
-    }],
-  );
+  const [userCart, setUserCart] = useState([]);
+  const [currentOrder, setCurrentOrder]=useState(null);
   
   //Global-state: 13º- utilizar alguma das actions setadas no switch do storeReducer
-  const handleAddedToCart=()=> cartContex.dispatch({ 
-    type: 'ADD_TO_CART', product:cartProducts[0] 
-  });
-  const handleSelectPayment=(e)=> console.log(e.target.value);
+  const handleClearCart = ()=>{
+    const confirm = window.confirm('Deseja esvaziar seu carrinho?')
+    confirm === true &&
+    setUserCart([]);   
+    cartContext.dispatch({
+      type: 'REMOVE_FROM_CART', filteredCart:[]
+    });  
+  };
+  const handleSelectPayment=(e)=> setCurrentOrder(
+    {...currentOrder, paymentMethod: e.target.value}
+  );
+  const handleConfirmOrder=()=> {
+    const extractedIdCart = userCart.map(product=>{
+      return {id: product.product.id, quantity: product.quantity}
+    })
+    setCurrentOrder({...currentOrder, products: extractedIdCart})
+}
+  
+  const cartSum=()=>{
+    let subtotal = 0;
+    userCart.forEach(product=>{
+      subtotal += product.product.price*product.quantity
+    });
+    return subtotal.toFixed(2)
+  };
 
-  console.log(cartContex)
+  useEffect(()=>{
+    userCart.length < cartContext.userCart.cart.length &&
+    setUserCart(cartContext.userCart.cart)
+  },[])
 
+  console.log(currentOrder)
   return(
     <MainWrapper>
       <ViewAdressCard
@@ -58,32 +75,42 @@ const CartPage =()=>{
 
       <CartProductsView>
         {
-          cartProducts !== null &&
-          cartProducts.map(product =>{
+          userCart.length > 0 ?
+          userCart.map(selectedProduct =>{
+            console.log(selectedProduct.quantity)
             return(
               <ProductCard 
-              src={product.src}
-              productName={product.productName}
-              description={product.description}
-              price={product.price}
-              quantity={product.quantity}
-              id={product.id}
-              addToCart={()=> console.log('adicionado ao carrinho')}
-              selectOnChange
-              removeFromCart
+              src={selectedProduct.product.photoUrl}
+              productName={selectedProduct.product.name}
+              description={selectedProduct.product.description}
+              price={selectedProduct.product.price}
+              quantity={selectedProduct.quantity}
+              id={selectedProduct.product.id}
+              hiddeActionButton
               />
             )
           })
+          : <GenText>Carrinho vazio</GenText>
         }
       </CartProductsView>
-      
+
+      {
+      userCart.length > 0 &&
+        <GenText salmon onClick={handleClearCart}>Esvaziar carrinho</GenText>
+      }
       <ShippingInfo>
         <GenText>Frete R$ 6.00</GenText>
       </ShippingInfo>
 
       <PriceInfo>
         <GenText>SUBTOTAL</GenText>
-        <GenHiText salmon>r$67.00</GenHiText>
+        <GenHiText salmon>
+          r${
+            userCart.length > 0 ?
+            cartSum()
+            : 0
+          }
+        </GenHiText>
       </PriceInfo>
 
       <RadioInput
@@ -92,7 +119,7 @@ const CartPage =()=>{
       onClickOption={handleSelectPayment}
       required
       />
-      <GenButton onClick={handleAddedToCart}>Confirmar</GenButton>
+      <GenButton onClick={handleConfirmOrder}>Confirmar</GenButton>
 
       <GenNavBar
         onClickToHome={()=>history.push('/home')}
