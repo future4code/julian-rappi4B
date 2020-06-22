@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
+import {useLocation} from 'react-router-dom';
+import {usePrivatePage} from '../../hooks/hooks';
+import {validedToken} from '../../utils/utils';
 import RestaurantsListContext from '../../contexts/RestaurantsListContext';
+import UserInfosContext from '../../contexts/UserInfosContext';
 import { useHistory } from 'react-router-dom';
 import api from '../../services/api';
+import LogoRappiW from '../../assets/logo-rappi4-white.png';
 
 import {
   MainWrapper,
@@ -9,7 +14,8 @@ import {
   GenText,
   RestaurantCard,
   GenNavBar,
-  ListenerCard
+  ListenerCard,
+  LoadingPage
 } from '../rappi4bUi/rappi4bUi';
 
 import {
@@ -18,6 +24,17 @@ import {
 } from './styles';
 
 const HomePage = () => {
+
+  const {pathname} = useLocation();
+  
+  const restaurantsListContext = useContext(RestaurantsListContext);
+  const userInfosContext = useContext(UserInfosContext);
+  const history = useHistory();
+
+  const token = validedToken(userInfosContext);
+  usePrivatePage(userInfosContext);
+
+  const [showLoadingPage, setShowLoadingPage] = useState(true);
   const [inputValue, setInputValue] = useState('');
   const [displayRestaurants, setDisplayRestaurants] = useState('ALL');
   const [searchList, setSearchList] = useState([]);
@@ -25,12 +42,8 @@ const HomePage = () => {
   const [restaurantsList, setRestaurantsList] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [activeOrder, setActiveOrder] = useState(null);
+  
 
-  const restaurantsListContext = useContext(RestaurantsListContext);
-
-  const history = useHistory();
-
-  //função que mapeia e filtra a lista de categorias
   const filteredCategories = () => {
     const list = restaurantsList.map((restaurant) => {
       const category = restaurant.category
@@ -40,24 +53,7 @@ const HomePage = () => {
       return !categoryList.includes(category)
     })
     return categories
-  }
-
-  //requisição login para autenticação do usuário
-  const Login = () => {
-
-    const body = {
-      email: 'bia@gmail.com',
-      password: '123456'
-    }
-
-    api.post('login', body)
-      .then((response) => {
-        localStorage.setItem('token', response.data.token)
-      });
-
-  }
-
-  //função que filtra a lista de restaurantes conforme a categoria escolhida pelo usuário
+  };
   const filteredRestaurantsLists = (event) => {
     setDisplayRestaurants('CATEGORY');
 
@@ -85,13 +81,10 @@ const HomePage = () => {
 
   //função side-effect que retorna os dados atualizados dos restaurantes, buscados pelo endpoint Get Restaurants
   useEffect(() => {
-
-    Login();
-
     if(restaurantsListContext.restaurantsList.length === 0) {
       api.get('restaurants', {
         headers: {
-          auth: localStorage.getItem('token')
+          auth: token
         }
       })
         .then(response => {
@@ -99,13 +92,15 @@ const HomePage = () => {
           restaurantsListContext.dispatch({ type: 'SET_RESTAURANTS_LIST', restaurantsList: response.data.restaurants })
         })
         .catch(err => {
-          console.error(err)
+          token === null ? window.alert('Sessão expirada. Faça login e se mantenha logado.') :
+          window.alert(err.response.data.message);
+
+          history.replace('/');
         });
     }
     else {
       setRestaurantsList(restaurantsListContext.restaurantsList)
     }
-
   }, []);
   
   //função side-effect que 'seta' no estado a lista de categorias filtrada
@@ -124,109 +119,109 @@ const HomePage = () => {
   useEffect(() => {
     api.get('active-order', {
       headers: {
-        auth: localStorage.getItem('token')
+        auth: token
       }
     })
       .then(response => {
         setActiveOrder(response.data.order)
       })
-      .catch(err => {
-        console.error(err)
-      });
+  }, []);
+  useEffect(()=>{
+    restaurantsList.length > 0 && setTimeout(()=>setShowLoadingPage(false), 500);
+  },[restaurantsList]);
+  const conditionalRender = ()=>{
+    if(showLoadingPage === true){
+      return <LoadingPage src={LogoRappiW}/>
+    }
+    return(
+      <MainWrapper>
+        <GenInput
+          type='text'
+          id='idInputSearch'
+          placeholder='Restaurante'
+          onChange={onChangeSearch}
+          value={inputValue}
+          onKeyDown={filteredByText}
+          onClick={() => setDisplayRestaurants('SEARCH')}
+        />
+        <CategoriesList>
+          {categoryList.map((category) => {
+            return (
+              <GenText
+                sticky
+                hover
+                id={category}
+                onClick={filteredRestaurantsLists}
+              >
+                {category}
+              </GenText>
+            )
+          })}
+        </CategoriesList>
+        <MainWrapper2>
+          {
+            displayRestaurants === 'CATEGORY' &&
+            filteredRestaurants.map((restaurant) => {
+              return (
+                <RestaurantCard
+                  openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
+                  src={restaurant.logoUrl}
+                  restaurantName={restaurant.name}
+                  deliveryTime={restaurant.deliveryTime}
+                  shipping={restaurant.shipping.toFixed(2)}
+                />
+              )
+            })
 
-  }, [])
+            ||
 
+            displayRestaurants === 'SEARCH' &&
+            searchList.map((restaurant) => {
+              return (
+                <RestaurantCard
+                  openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
+                  src={restaurant.logoUrl}
+                  restaurantName={restaurant.name}
+                  deliveryTime={restaurant.deliveryTime}
+                  shipping={restaurant.shipping.toFixed(2)}
+                />
+              )
+            })
+
+            ||
+
+            restaurantsList.map((restaurant) => {
+              return (
+                <RestaurantCard
+                  openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
+                  src={restaurant.logoUrl}
+                  restaurantName={restaurant.name}
+                  deliveryTime={restaurant.deliveryTime}
+                  shipping={restaurant.shipping.toFixed(2)}
+                />
+              )
+            })
+          }
+
+          {
+            activeOrder !== null &&
+            <ListenerCard
+              restaurantName={activeOrder.restaurantName}
+              totalPrice={activeOrder.totalPrice.toFixed(2)}
+            />
+          }
+        </MainWrapper2>
+        <GenNavBar
+          pathName={pathname}
+          onClickToHome={() => history.push('/home')}
+          onClickToCart={() => history.push('/cart')}
+          onClickToProfile={() => history.push('/perfil')}
+        />
+      </MainWrapper>
+    )
+  }
   return (
-    <MainWrapper>
-
-      <GenInput
-        type='text'
-        id='idInputSearch'
-        placeholder='Restaurante'
-        onChange={onChangeSearch}
-        value={inputValue}
-        onKeyDown={filteredByText}
-        onClick={() => setDisplayRestaurants('SEARCH')}
-      />
-
-      <CategoriesList>
-        {categoryList.map((category) => {
-          return (
-            <GenText
-              sticky
-              hover
-              id={category}
-              onClick={filteredRestaurantsLists}
-            >
-              {category}
-            </GenText>
-          )
-        })}
-      </CategoriesList>
-
-      <MainWrapper2>
-        {
-          displayRestaurants === 'CATEGORY' &&
-          filteredRestaurants.map((restaurant) => {
-            return (
-              <RestaurantCard
-                openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
-                src={restaurant.logoUrl}
-                restaurantName={restaurant.name}
-                deliveryTime={restaurant.deliveryTime}
-                shipping={restaurant.shipping.toFixed(2)}
-              />
-            )
-          })
-
-          ||
-
-          displayRestaurants === 'SEARCH' &&
-          searchList.map((restaurant) => {
-            return (
-              <RestaurantCard
-                openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
-                src={restaurant.logoUrl}
-                restaurantName={restaurant.name}
-                deliveryTime={restaurant.deliveryTime}
-                shipping={restaurant.shipping.toFixed(2)}
-              />
-            )
-          })
-
-          ||
-
-          restaurantsList.map((restaurant) => {
-            return (
-              <RestaurantCard
-                openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
-                src={restaurant.logoUrl}
-                restaurantName={restaurant.name}
-                deliveryTime={restaurant.deliveryTime}
-                shipping={restaurant.shipping.toFixed(2)}
-              />
-            )
-          })
-        }
-
-        {
-          activeOrder !== null &&
-          <ListenerCard
-            restaurantName={activeOrder.restaurantName}
-            totalPrice={activeOrder.totalPrice.toFixed(2)}
-          />
-        }
-
-      </MainWrapper2>
-
-      <GenNavBar
-        onClickToHome={() => history.push('/home')}
-        onClickToCart={() => history.push('/cart')}
-        onClickToProfile={() => history.push('/perfil')}
-      />
-
-    </MainWrapper>
-
+    conditionalRender()
   );
 };
 

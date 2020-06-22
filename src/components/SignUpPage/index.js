@@ -1,6 +1,6 @@
 import React from 'react';
-import api from '../../services/api'
-import LogoRappi from '../LogoRappi/title-rappi4.png'
+import api from '../../services/api';
+import LogoRappi from '../../assets/logo-rappi4-salmon.png';
 import { MainWrapper, GenInput, GenText, GenForm, GenButton } from '../rappi4bUi/rappi4bUi'
 
 import { useForm } from '../../hooks/hooks';
@@ -106,6 +106,7 @@ const SignUpPage = () => {
 
         <GenButton type='submit'>Cadastrar</GenButton>
       </GenForm>
+      <GenText salmon onClick={()=> history.goBack()}>Voltar</GenText>
     </MainWrapper>
   )
 

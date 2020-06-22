@@ -1,17 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import api from '../../services/api'
 
+import UserInfosContext from '../../contexts/UserInfosContext';
+
+import {usePrivatePage} from '../../hooks/hooks';
+import {validedToken} from '../../utils/utils';
+
 import {
-  MainWrapper, GenInput, GenButton, GenForm
+  MainWrapper, GenInput, GenButton, GenForm, GenText
 } from '../rappi4bUi/rappi4bUi';
 
 const EditProfilePage =()=>{
+
+  const userInfosContext = useContext(UserInfosContext);
+
+  const token = validedToken(userInfosContext);
+  usePrivatePage(userInfosContext);
+
   const [infosProfile, setInfosProfile] = useState(null)
 
   const history = useHistory()
-
-  const token = localStorage.getItem('token')
 
   const onClickEditProfile = (event) => {    
     event.preventDefault()
@@ -39,7 +48,7 @@ const EditProfilePage =()=>{
 
   return (
     <MainWrapper>
-      <h3>Editar</h3>
+      <GenText>Informações pessoais</GenText>
       <GenForm onSubmit={onClickEditProfile}>
         <GenInput 
           inputLabel="Nome"
@@ -68,6 +77,7 @@ const EditProfilePage =()=>{
         <GenButton>Salvar</GenButton>
          
       </GenForm>
+      <GenText salmon onClick={()=> history.push('/perfil')}>Voltar</GenText>
     </MainWrapper>
   )
 };

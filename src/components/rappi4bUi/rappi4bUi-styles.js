@@ -27,8 +27,8 @@ export const InputLabel = styled.label`
   color: #b8b8b8;
 `;
 export const InputArea = styled.input`
-  width: 264px;
-  height: 18px;
+  width: 100%;
+  height: 100%;
   font-family: Roboto;
   font-size: 16px;
   font-weight: normal;
@@ -48,7 +48,6 @@ export const InputArea = styled.input`
 `;
 export const ButtonWrapper = styled.button`
   display: sticky;
-  
   width: 328px;
   height: 42px;
   border: none;
@@ -124,10 +123,12 @@ export const NavBarButton = styled.button`
   font-size: large;
   background: none;
   border: none;
+  color:${props=> props.pathName &&'#e86e5a'};
+  font-size:${props=> props.pathName &&'x-large'};
   &:focus, &:active, &:hover{
     color: #e86e5a;
     font-size: x-large;
-    outline: none;
+    outline: ${props=> props.pathName &&'none'};
   };
 `;
 export const FormWrapper = styled.form`
@@ -289,17 +290,21 @@ export const OrderListenerCard = styled.article`
   width: 360px;
   height: 118px;
   background-color: #e86e5a;
-  display: flex;
+  display:flex;
   flex-direction: row;
   justify-content: space-between;
   border-top: 1px solid #b8b8b8;
   padding-bottom: 10px;
+  transition: height 1s linear 0.1s;
+  &:hover{
+   height: 0px;
+  };
 `;
 export const ClockView = styled.div`
   width: 80px;
-  height: 100%;
+  max-height: 90%;
   color: white;
-  display: flex;
+  display: ${props=> props.hidde === false ?'flex':'none'};
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -307,7 +312,7 @@ export const ClockView = styled.div`
 export const ActiveOrderDetails = styled.div`
   height: 100%;
   width:280px;
-  display: flex;
+  display: ${props=> props.hidde === false ?'flex':'none'};
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
@@ -404,4 +409,16 @@ export const AddresBox = styled.div`
   justify-content: space-between;
   align-items: center;
   background: #eeeeee;
+`;
+export const LoadingPageWrapper = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  background: #e86e5a;
+`;
+export const LoadingPageLogo = styled.img`
+
 `;
