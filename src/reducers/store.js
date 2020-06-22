@@ -2,13 +2,17 @@
 
 //Global-state: 2º - criar o initial state
 export const initialState = {
+  userInfos:null,
   userCart:{},
-  userInfos:{},
   restaurantsList:[]
 };
 //Global-state: 3º - criar o reducer
 export const storeReducer=(state, action)=>{
   switch (action.type) {
+    case 'SET_USER_INFOS':
+      let infos = action.infos;
+      return {...state, userInfos: infos};
+
     case 'ADD_TO_CART':
       let order = action.order;
       return {...state, userCart:
@@ -21,9 +25,6 @@ export const storeReducer=(state, action)=>{
         ...state, userCart:{
           ...state.userCart, cart: filteredCart
       }};
-    case 'SET_USER_INFOS':
-      let infos = action.infos;
-      return {...state, userInfos: infos};
 
     case 'SET_RESTAURANTS_LIST':
       let restaurantsList = action.restaurantsList;

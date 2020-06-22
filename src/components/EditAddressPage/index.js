@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import api from '../../services/api'
+import api from '../../services/api';
+
+import UserInfosContext from '../../contexts/UserInfosContext';
+
+import {usePrivatePage} from '../../hooks/hooks';
+import {validedToken} from '../../utils/utils';
 
 import {
-  MainWrapper, GenInput, GenForm, GenButton
+  MainWrapper, GenInput, GenForm, GenButton, GenText
 } from '../rappi4bUi/rappi4bUi';
 
 const EditAddressPage =()=>{
-  const [infosAddressForm, setInfosAddressForm] = useState(null)
 
-  const token = localStorage.getItem('token')
+  const userInfosContext = useContext(UserInfosContext);
+
+  const token = validedToken(userInfosContext);
+  usePrivatePage(userInfosContext);
+
+  const [infosAddressForm, setInfosAddressForm] = useState(null)
     
   const onClickEditAddres = (event) => { 
     event.preventDefault()
@@ -38,7 +47,7 @@ const EditAddressPage =()=>{
       
     return (
     <MainWrapper>
-      <h3>Endereço</h3>
+      <GenText>Informações de endereço</GenText>
       <GenForm onSubmit={onClickEditAddres}> 
         <GenInput  
           inputLabel="Logradouro"                     
@@ -90,8 +99,8 @@ const EditAddressPage =()=>{
         />
        
         <GenButton>Salvar</GenButton>
-
     </GenForm>
+    <GenText salmon onClick={()=> history.push('/perfil')}>Voltar</GenText>
   </MainWrapper>
   
   )

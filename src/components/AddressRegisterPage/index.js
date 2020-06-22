@@ -1,6 +1,6 @@
 import React from 'react';
 import api from '../../services/api'
-import { MainWrapper, GenInput, GenForm, GenButton } from '../rappi4bUi/rappi4bUi'
+import { MainWrapper, GenInput, GenForm, GenButton, GenText } from '../rappi4bUi/rappi4bUi'
 import { useForm } from '../../hooks/hooks';
 import { useHistory } from 'react-router-dom'
 
@@ -100,6 +100,7 @@ const AddressRegisterPage = () => {
         /> 
           <GenButton type='submit'>Salvar</GenButton>
         </GenForm>
+        <GenText salmon onClick={()=> history.replace('/')}>Voltar para login</GenText>
        </MainWrapper>
   )
 

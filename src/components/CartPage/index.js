@@ -1,12 +1,16 @@
 //Global-state: 10º- para usar o global state nos componentes filhos, importar o useContext
 import React, {useState, useContext, useEffect} from 'react';
-
+import {useLocation} from 'react-router-dom'
 //Global-state: 11º- importar o context que deseja usar do global state
 import CartContext from '../../contexts/CartContext';
 import RestaurantsListContex from '../../contexts/RestaurantsListContext';
+import UserInfosContext from '../../contexts/UserInfosContext';
 
 import api from '../../services/api';
 import {useHistory} from 'react-router-dom';
+
+import {usePrivatePage} from '../../hooks/hooks';
+import {validedToken} from '../../utils/utils';
 
 import {
   CartProductsView, RestaurantInfos, ShippingInfo,
@@ -21,17 +25,28 @@ import {
 
 const CartPage =()=>{
   const history = useHistory();
+  const {pathname} = useLocation();
 
   //Global-state: 12º- instanciar o useContext com o context importado e ter acesso global state
   const cartContext = useContext(CartContext);
   const restaurantsListContext = useContext(RestaurantsListContex);
+  const userInfosContext = useContext(UserInfosContext);
+
+  const token = validedToken(userInfosContext);
+  usePrivatePage(userInfosContext);
 
   const [userOrder, setUserOrder] = useState([]);
   const [paymentMethod, setPaymentMethod]=useState('');
   const [activeOrderRestaurants, setActiveOrderRestaurants] = useState([]);
   const [totalShipping, setTotalShipping] = useState(0);
 
+  const localAdress = JSON.parse(localStorage.getItem('rappi4BUserInfos')).address
+  
   //Global-state: 13º- utilizar alguma das actions setadas no switch do storeReducer
+
+  //Não foi possível criar uma função para limpar apenas um item do cart, pois ocorria um bug
+  //na renderização condicionar do botão de remover que mudava ele para adicionar na medida
+  //em que removia os items de cima para baixo, mas não de baixo para cima "\_(''/)_/".
   const handleClearCart = ()=>{
     const confirm = window.confirm('Deseja esvaziar seu carrinho?')
     confirm === true &&
@@ -54,9 +69,10 @@ const CartPage =()=>{
           try{
             window.alert('Aguarde enquanto confirmamos seu pedido...')
             const response = await api.post(`restaurants/${restaurantWithOrder}/order`, requestBody, {headers:{
-              auth: localStorage.getItem('token')
+              auth: token
             }});
             window.alert(`Pedido no restaurante ${response.data.order.restaurantName} realizado!`)
+            handleClearCart();
           }catch(e){
             window.alert(
               `${e.response.data.message}. Não é permitido mais de um pedido de restaurante por vez.`
@@ -110,7 +126,7 @@ const CartPage =()=>{
     <MainWrapper>
       <ViewAdressCard
       cardTitle={'Endreço de entrega'}
-      userAddress={'Rua Alessandra Vieira, 42'}
+      userAddress={localAdress}
       showEditButton ={false}
       />
 
@@ -182,6 +198,7 @@ const CartPage =()=>{
       <GenButton onClick={handleConfirmOrder}>Confirmar</GenButton>
 
       <GenNavBar
+        pathName={pathname}
         onClickToHome={()=>history.push('/home')}
         onClickToProfile={()=> history.push('/perfil')}
       />

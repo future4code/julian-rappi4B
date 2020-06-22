@@ -1,12 +1,18 @@
-import React from 'react';
-import api from '../../services/api'
-import LogoRappi from '../LogoRappi/title-rappi4.png'
-import { InputButton } from './style'
-import { MainWrapper, GenInput, GenText, GenForm, GenButton, InputLabel } from '../rappi4bUi/rappi4bUi'
-import { useHistory } from 'react-router-dom'
+import React, {useContext, useState, useEffect} from 'react';
+import UserInfosContext from '../../contexts/UserInfosContext';
+import api from '../../services/api';
+import LogoRappi from '../../assets/logo-rappi4-salmon.png';
+import LogoRappiW from '../../assets/logo-rappi4-white.png';
+import { InputButton, RememberMark, RememberMarkOption, RememberMarkSelect } from './style';
+import { MainWrapper, GenInput, GenText, GenForm, GenButton, LoadingPage} from '../rappi4bUi/rappi4bUi';
+import { useHistory } from 'react-router-dom';
 import { useForm } from '../../hooks/hooks';
+import {validedToken} from '../../utils/utils';
 
 const LoginPage = () => {
+  const [showLoadingPage, setShowLoadingPage] = useState(true);
+  const userInfosContext = useContext(UserInfosContext); 
+  const [rememberLogin, setRememberLogin] = useState(false);
   const { form, onChange, resetForm } = useForm({
     email: '',
     password: ''
@@ -18,31 +24,44 @@ const LoginPage = () => {
     const { name, value } = event.target;
 
     onChange(name, value);
-  }
+  };
 
   const history = useHistory();
 
   const goToPrivateArea = (event) => {
+    setShowLoadingPage(true);
     const body = { email, password }
     event.preventDefault();
     api.post('login', body)
     .then(response => {
-      window.localStorage.setItem('token', response.data.token);
-      history.push('/home');
+      if(rememberLogin === true){
+        localStorage.setItem('rappi4BUserInfos', JSON.stringify(response.data.user))
+        localStorage.setItem('rappi4BToken', response.data.token);
+        userInfosContext.dispatch({type: 'SET_USER_INFOS', infos: null});
+      }else{
+        userInfosContext.dispatch({type: 'SET_USER_INFOS', infos: response.data.token});
+        localStorage.setItem('rappi4BToken', '')
+      };
+      history.replace('/home');
       resetForm();
     })
-    .catch(error => {
-      window.alert('Não foi possível acessar')
+    .catch(err => {
+      setShowLoadingPage(false)
+      window.alert(err.response.data.message)
     })
-  }
-  
+  };
   const GoToRegisterPage = () => {
     history.push('/cadastrar')
+  };  
+  useEffect(()=>{
+    validedToken() ? setTimeout(()=> history.push('/home'), 2000) : setShowLoadingPage(false);
+  },[])
 
-  }
-  
-  return (
-    <MainWrapper>
+  const conditionalRender = ()=>{
+    if(showLoadingPage === true){
+      return <LoadingPage src={LogoRappiW}/>
+    }
+    return <MainWrapper>
       <img src={LogoRappi} />
       <GenText>Entrar</GenText>
         <GenForm onSubmit={goToPrivateArea}>
@@ -68,8 +87,22 @@ const LoginPage = () => {
            >Entrar
         </GenButton> 
       </GenForm>
-      <GenText>Não possui cadastro? <InputButton size='small' onClick={GoToRegisterPage}><i>Clique aqui.</i></InputButton></GenText>
+      <RememberMarkOption>Lembre-se de mim
+        <RememberMarkSelect 
+        onClick={()=>setRememberLogin(! rememberLogin)}
+        />
+        <RememberMark rememberLogin={rememberLogin}/>
+      </RememberMarkOption>
+      <GenText>
+        Não possui cadastro? 
+      <InputButton size='small' onClick={GoToRegisterPage}>
+        <i>Clique aqui.</i>
+      </InputButton>
+      </GenText>
     </MainWrapper>
+  }
+  return (
+    conditionalRender()
    )
 };
 

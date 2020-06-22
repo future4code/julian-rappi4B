@@ -12,7 +12,7 @@ import {
   Select, PopupSelectButton, Option, PopupSelectShadow, OrderListenerCard,
   ClockView, ActiveOrderDetails, RadioInputWrapper, RadioSelect, RadioOption,
   RadioMark, RadioHr,OrderHIstoryCardWrapper, PersonalInfosCardWrapper, 
-  InfosBox, ProfileBox, AddresBox, EditIconButton
+  InfosBox, ProfileBox, AddresBox, EditIconButton, LoadingPageWrapper, LoadingPageLogo
 }from './rappi4bUi-styles'
 
 export const AppWrapper = styled.main`
@@ -66,9 +66,18 @@ export const GenNavBar =(props)=>{
 
   return(
     <NavBarWrapper>
-      <NavBarButton onClick={props.onClickToHome}><RiHomeSmileLine/></NavBarButton>
-      <NavBarButton onClick={props.onClickToCart}><RiShoppingCartLine/></NavBarButton>
-      <NavBarButton onClick={props.onClickToProfile}><RiUser5Line/></NavBarButton>
+      <NavBarButton 
+      pathName={props.pathName === '/home' && props.pathName} onClick={props.onClickToHome}>
+        <RiHomeSmileLine/>
+      </NavBarButton>
+      <NavBarButton 
+      pathName={props.pathName === '/cart' && props.pathName} onClick={props.onClickToCart}>
+        <RiShoppingCartLine/>
+      </NavBarButton>
+      <NavBarButton 
+      pathName={props.pathName === '/perfil' && props.pathName} onClick={props.onClickToProfile}>
+        <RiUser5Line/>
+      </NavBarButton>
     </NavBarWrapper>
   )
 };
@@ -167,15 +176,19 @@ export const ProductCard =(props)=>{
   )
 };
 export const ListenerCard=(props)=>{
+  const[hiddeCard, setHiddeCard] = useState(false);
 
   return(
-    <OrderListenerCard>
-      <ClockView>
+    <OrderListenerCard 
+    onClick={()=> setHiddeCard( ! hiddeCard)} 
+    >
+      <ClockView hidde={hiddeCard}>
         <GenHiText largeIcon>
           <FaRegClock/>
         </GenHiText>
+        <GenText minor>Clique para esconder</GenText>
       </ClockView>
-      <ActiveOrderDetails>
+      <ActiveOrderDetails hidde={hiddeCard}>
         <GenText white>Pedido em andamento</GenText>
         <GenText>{props.restaurantName}</GenText>
         <GenHiText>subtotal r${props.totalPrice}</GenHiText>
@@ -198,8 +211,9 @@ export const RadioInput = (props)=>{
                 option.toLowerCase().includes('dinheiro') ? 'money' : 'creditcard'
               }
               onClick={props.onClickOption}
-              type='radio' /> 
-              <RadioMark></RadioMark>
+              type='radio' 
+              /> 
+              <RadioMark/>
             </RadioOption>
           )
         })
@@ -253,3 +267,11 @@ export const ViewAdressCard=(props)=>{
     </AddresBox>
   )
 };
+export const LoadingPage=(props)=>{
+
+  return(
+    <LoadingPageWrapper>
+      <LoadingPageLogo src={props.src} />
+    </LoadingPageWrapper>
+  )
+}

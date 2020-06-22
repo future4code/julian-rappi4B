@@ -2,7 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import CartContext from '../../contexts/CartContext';
 import api from '../../services/api'
 import { useParams, useHistory } from 'react-router-dom';
-import { MainWrapper, ProductCard, GenText} from '../rappi4bUi/rappi4bUi';
+
+import UserInfosContext from '../../contexts/UserInfosContext';
+
+import {usePrivatePage} from '../../hooks/hooks';
+import {validedToken} from '../../utils/utils';
+
+import LogoRappiW from '../../assets/logo-rappi4-white.png';
+
+import { MainWrapper, ProductCard, GenText, LoadingPage} from '../rappi4bUi/rappi4bUi';
 import {RadioHr} from '../rappi4bUi/rappi4bUi-styles';
 import { 
   Img, 
@@ -11,7 +19,15 @@ import {
 } from './styles';
 
 const RestaurantDetailPage =()=>{
-  const [detail, setDetail] = useState()
+
+  const [showLoadingPage, setShowLoadingPage] = useState(true);
+
+  const userInfosContext = useContext(UserInfosContext);
+
+  const token = validedToken(userInfosContext);
+  usePrivatePage(userInfosContext);
+
+  const [detail, setDetail] = useState(null)
   const [products, setProducts] = useState(null)  
   
   const cartContext = useContext(CartContext);
@@ -28,7 +44,8 @@ const RestaurantDetailPage =()=>{
     });
     const validedOrder =()=>{
       if(
-        cartContext.userCart[restaurantId]!== undefined && 
+        cartContext.userCart[restaurantId]!== null &&
+        cartContext.userCart[restaurantId]!== undefined &&
         cartContext.userCart[restaurantId].length > 0
         ){
           return {
@@ -64,52 +81,58 @@ const RestaurantDetailPage =()=>{
   useEffect(() => {
     api.get(`restaurants/${restaurantId}`, {
       headers: {
-        auth: window.localStorage.getItem('token')
+        auth: token
       }
     }).then((response) =>{              
         setDetail(response.data.restaurant)
         setProducts(response.data.restaurant.products)
       })
   }, []); 
- 
+
+  useEffect(()=>{
+    detail !== null && setShowLoadingPage(false)
+  },[detail]);
+
+  const conditionalRender = ()=>{
+    if(showLoadingPage === true){
+      return <LoadingPage src={LogoRappiW}/>
+    }
+    return <MainWrapper>
+            <DetailContainer>
+              <Img src={detail !== null && detail.logoUrl }/>            
+              <GenText salmon>{detail !== null && detail.name}</GenText>
+              <GenText detail minor>{detail !== null && detail.category}</GenText>
+              <DeliveryInfos>
+                <GenText detail minor>{detail !== null && `${detail.deliveryTime}min`}</GenText>
+                <GenText detail minor>{detail !== null && `Frete R$${detail.shipping.toFixed(2)}`}</GenText>
+              </DeliveryInfos>
+              <GenText detail minor>{detail !== null && detail.address}</GenText>     
+            </DetailContainer>
+            <GenText  onClick={() => history.goBack()} salmon>Voltar</GenText>
+            <GenText alignSelfStart>{detail !== null && `Cardápio`}</GenText>
+            <RadioHr/>
+            <MainWrapper>             
+              {
+                products !== null &&
+                products.map((product) => {
+                  return(
+                    <ProductCard
+                      src={product.photoUrl}
+                      productName={product.name}
+                      description={product.description}
+                      price={product.price.toFixed(2)}                
+                      id={product.id}
+                      addToCart={getSelectedProduct}                
+                      removeFromCart={removeProduct}               
+                    />
+                  )
+                })
+              }
+            </MainWrapper>
+          </MainWrapper>
+  };
   return(
-    <MainWrapper>
-      <DetailContainer>
-        <Img src={detail !== undefined && detail.logoUrl }/>            
-        <GenText salmon>{detail !== undefined && detail.name}</GenText>
-        <GenText detail minor>{detail !== undefined && detail.category}</GenText>
-        <DeliveryInfos>
-          <GenText detail minor>{detail !== undefined && `${detail.deliveryTime}min`}</GenText>
-          <GenText detail minor>{detail !== undefined && `Frete R$${detail.shipping.toFixed(2)}`}</GenText>
-        </DeliveryInfos>
-        <GenText detail minor>{detail !== undefined && detail.address}</GenText>     
-      </DetailContainer>
-
-      <GenText  onClick={() => history.goBack()} salmon>Voltar</GenText>
-      
-      <GenText alignSelfStart>{detail !== undefined && `Cardápio`}</GenText>
-
-      <RadioHr/>
-      
-      <MainWrapper>             
-        {
-          products !== null &&
-          products.map((product) => {
-            return(
-              <ProductCard
-                src={product.photoUrl}
-                productName={product.name}
-                description={product.description}
-                price={product.price.toFixed(2)}                
-                id={product.id}
-                addToCart={getSelectedProduct}                
-                removeFromCart={removeProduct}               
-              />
-            )
-          })
-        }
-      </MainWrapper>
-    </MainWrapper>
+   conditionalRender()
   ) 
 };
 export default RestaurantDetailPage
