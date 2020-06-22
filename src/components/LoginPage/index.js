@@ -35,19 +35,19 @@ const LoginPage = () => {
     api.post('login', body)
     .then(response => {
       if(rememberLogin === true){
-        localStorage.setItem('rappi4BUserInfos', JSON.stringify(response.data.user))
-        localStorage.setItem('rappi4BToken', response.data.token);
+        localStorage.setItem('rappi4BUserInfos', JSON.stringify(response.data));
         userInfosContext.dispatch({type: 'SET_USER_INFOS', infos: null});
       }else{
-        userInfosContext.dispatch({type: 'SET_USER_INFOS', infos: response.data.token});
-        localStorage.setItem('rappi4BToken', '')
+        userInfosContext.dispatch({type: 'SET_USER_INFOS', infos: response.data});
+        localStorage.setItem('rappi4BUserInfos', '')
       };
       history.replace('/home');
       resetForm();
     })
     .catch(err => {
       setShowLoadingPage(false)
-      window.alert(err.response.data.message)
+      console.log(err)
+      window.alert('Acesso negado.')
     })
   };
   const GoToRegisterPage = () => {
@@ -55,7 +55,7 @@ const LoginPage = () => {
   };  
   useEffect(()=>{
     validedToken() ? setTimeout(()=> history.push('/home'), 2000) : setShowLoadingPage(false);
-  },[])
+  },[]);
 
   const conditionalRender = ()=>{
     if(showLoadingPage === true){

@@ -32,7 +32,7 @@ const HomePage = () => {
   const history = useHistory();
 
   const token = validedToken(userInfosContext);
-  usePrivatePage(userInfosContext);
+  usePrivatePage(token);
 
   const [showLoadingPage, setShowLoadingPage] = useState(true);
   const [inputValue, setInputValue] = useState('');
@@ -78,7 +78,6 @@ const HomePage = () => {
 
     setSearchList(filter);
   }
-
   //função side-effect que retorna os dados atualizados dos restaurantes, buscados pelo endpoint Get Restaurants
   useEffect(() => {
     if(restaurantsListContext.restaurantsList.length === 0) {
@@ -126,9 +125,11 @@ const HomePage = () => {
         setActiveOrder(response.data.order)
       })
   }, []);
+
   useEffect(()=>{
     restaurantsList.length > 0 && setTimeout(()=>setShowLoadingPage(false), 500);
   },[restaurantsList]);
+
   const conditionalRender = ()=>{
     if(showLoadingPage === true){
       return <LoadingPage src={LogoRappiW}/>
