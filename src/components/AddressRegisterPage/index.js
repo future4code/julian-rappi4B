@@ -43,7 +43,7 @@ const AddressRegisterPage = () => {
 
   return (
     <MainWrapper>
-      <GenForm onSubmit={AddressRegister}>
+      <GenForm autoComplete onSubmit={AddressRegister}>
         <GenInput 
           name='street'
           value={street}

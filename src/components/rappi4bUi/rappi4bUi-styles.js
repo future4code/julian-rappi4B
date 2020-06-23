@@ -27,7 +27,7 @@ export const InputLabel = styled.label`
   color: #b8b8b8;
 `;
 export const InputArea = styled.input`
-  width: 100%;
+  max-width: 100%;
   height: 100%;
   font-family: Roboto;
   font-size: 16px;

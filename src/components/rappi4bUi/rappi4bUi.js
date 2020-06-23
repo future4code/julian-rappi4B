@@ -47,6 +47,7 @@ export const GenInput =(props)=>{
       {props.inputLabel}
       </InputLabel>
       <InputArea
+      minLength={props.minLength}
       id={props.id}
       name={props.name}
       title={props.title}
