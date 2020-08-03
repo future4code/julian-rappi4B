@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import UserInfosContext from '../../contexts/UserInfosContext';
 
 import {usePrivatePage} from '../../hooks/hooks';
-import {validedToken} from '../../utils/utils';
+import {validedToken, validedInfos} from '../../utils/utils';
 
 import LogoRappiW from '../../assets/logo-rappi4-white.png';
 
@@ -23,22 +23,13 @@ const ProfilePage = () => {
   const userInfosContext = useContext(UserInfosContext);
 
   const token = validedToken(userInfosContext);
-  usePrivatePage(userInfosContext);
+  usePrivatePage(token);
+
+  const profileInfos = validedInfos(userInfosContext.userInfos);
 
   const [showLoadingPage, setShowLoadingPage] = useState(true);
-  const [profile, setProfile] = useState(null)
   
   const [ordersHistory, setOrdersHistory] = useState([])
-
-  useEffect(() => {
-    api.get('profile', {headers: {
-      auth: token
-    }}).then((response) => {
-      setProfile(response.data.user)
-    }).catch((error) => {
-      window.alert('Erro ao logar. Insira seus dados novamente.')
-    })
-  }, []);
 
   useEffect(() => {
     api.get('orders/history', {headers: {
@@ -46,29 +37,30 @@ const ProfilePage = () => {
     }}).then((response) => {
       setOrdersHistory(response.data.orders)
     }).catch((error) => {
-      window.alert('Não conseguimos acessar seu histórico de compras. Tente novamente mais tarde.')
+      token &&
+      window.alert('Não foi possível acessar o histórico de compras. Tente novamente mais tarde.')
     })
-  }, [])
+  }, []);
 
   useEffect(()=>{
-    profile !== null && setShowLoadingPage(false)
-  },[profile]);
+    ordersHistory.length > 0 && setShowLoadingPage(false)
+  },[ordersHistory]);
 
   const conditionalRender = ()=>{
     if(showLoadingPage === true){
       return <LoadingPage src={LogoRappiW}/>
     }
     return  <MainWrapper>
-                <ViewProfileCard
-                  userName={profile !== null && profile.name}
-                  userEmail={profile !== null && profile.email}
-                  userCpf={profile !== null && profile.cpf}
-                  editInfo={()=>history.push('/editar-perfil')}
-                />
-                <ViewAdressCard 
-                  userAddress={profile !== null && profile.address}
-                  editInfo ={()=>history.push('/editar-endereco')} 
-                />
+              <ViewProfileCard
+                userName={profileInfos.name}
+                userEmail={profileInfos.email}
+                userCpf={profileInfos.cpf}
+                editInfo={()=>history.push('/editar-perfil')}
+              />
+              <ViewAdressCard 
+                userAddress={profileInfos.address}
+                editInfo ={()=>history.push('/editar-endereco')} 
+              />
 
               <GenText 
               salmon 

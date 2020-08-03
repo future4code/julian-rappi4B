@@ -47,6 +47,7 @@ export const GenInput =(props)=>{
       {props.inputLabel}
       </InputLabel>
       <InputArea
+      minLength={props.minLength}
       id={props.id}
       name={props.name}
       title={props.title}
@@ -182,13 +183,13 @@ export const ListenerCard=(props)=>{
     <OrderListenerCard 
     onClick={()=> setHiddeCard( ! hiddeCard)} 
     >
-      <ClockView hidde={hiddeCard}>
+      <ClockView  onClick={()=> setHiddeCard( ! hiddeCard)} hidde={hiddeCard}>
         <GenHiText largeIcon>
           <FaRegClock/>
         </GenHiText>
         <GenText minor>Clique para esconder</GenText>
       </ClockView>
-      <ActiveOrderDetails hidde={hiddeCard}>
+      <ActiveOrderDetails  onClick={()=> setHiddeCard( ! hiddeCard)} hidde={hiddeCard}> 
         <GenText white>Pedido em andamento</GenText>
         <GenText>{props.restaurantName}</GenText>
         <GenHiText>subtotal r${props.totalPrice}</GenHiText>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import {validedToken} from '../utils/utils';
 
 export const useForm = (initialValues) => {
 
@@ -16,18 +17,15 @@ export const useForm = (initialValues) => {
   return { form, onChange, resetForm }
 };
 
-export const usePrivatePage = (context) => {
-
+export const usePrivatePage = (token) => {
   const history = useHistory();
 
   useEffect(() => {
-    const localToken = window.localStorage.getItem('rappi4BToken');
-    const globalToken = context.userInfos;
 
-    if (globalToken === null && !localToken && localToken === ''){
+    if (! token){
       window.alert('A sessão expirou. Faça login novamente.')
       history.replace('/');
-    }
+    };
   }, [history]);
 };
 

@@ -25,7 +25,7 @@ const RestaurantDetailPage =()=>{
   const userInfosContext = useContext(UserInfosContext);
 
   const token = validedToken(userInfosContext);
-  usePrivatePage(userInfosContext);
+  usePrivatePage(token);
 
   const [detail, setDetail] = useState(null)
   const [products, setProducts] = useState(null)  

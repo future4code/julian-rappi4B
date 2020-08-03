@@ -10,7 +10,7 @@ import api from '../../services/api';
 import {useHistory} from 'react-router-dom';
 
 import {usePrivatePage} from '../../hooks/hooks';
-import {validedToken} from '../../utils/utils';
+import {validedToken, validedInfos} from '../../utils/utils';
 
 import {
   CartProductsView, RestaurantInfos, ShippingInfo,
@@ -33,14 +33,13 @@ const CartPage =()=>{
   const userInfosContext = useContext(UserInfosContext);
 
   const token = validedToken(userInfosContext);
-  usePrivatePage(userInfosContext);
+  const userInfos = validedInfos(userInfosContext.userInfos);
+  usePrivatePage(token);
 
   const [userOrder, setUserOrder] = useState([]);
   const [paymentMethod, setPaymentMethod]=useState('');
   const [activeOrderRestaurants, setActiveOrderRestaurants] = useState([]);
   const [totalShipping, setTotalShipping] = useState(0);
-
-  const localAdress = JSON.parse(localStorage.getItem('rappi4BUserInfos')).address
   
   //Global-state: 13º- utilizar alguma das actions setadas no switch do storeReducer
 
@@ -126,7 +125,7 @@ const CartPage =()=>{
     <MainWrapper>
       <ViewAdressCard
       cardTitle={'Endreço de entrega'}
-      userAddress={localAdress}
+      userAddress={userInfos && userInfos.address}
       showEditButton ={false}
       />
 

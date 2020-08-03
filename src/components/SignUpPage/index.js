@@ -46,17 +46,19 @@ const SignUpPage = () => {
     <MainWrapper>
       <img src={LogoRappi} />
       <GenText>Cadastrar</GenText>
-      <GenForm onSubmit={goToPrivateArea}>
+      <GenForm autoComplete onSubmit={goToPrivateArea}>
         <GenInput
+          minLength={3}
           name='name'
           value={name}
           inputLabel={'Nome *'}
           onChange={handleInputChange}
           type='text'
           placeholder="Nome e sobrenome"
-          pattern="[A-Za-z]{3,}"
+          pattern="[A-Az-z]{3, }"
           title="O nome deve conter 3 letras no mínimo."
           required
+          
         />
         <GenInput
           name='email'
