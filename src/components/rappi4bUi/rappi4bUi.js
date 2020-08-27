@@ -17,13 +17,13 @@ import {
 
 export const AppWrapper = styled.main`
   margin: 0;
-  width: 100vw;
+  width: auto;
   height: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  overflow:auto;
+  overflow-x: hidden;
 `;
 export const MainWrapper = styled.main`
   width: 360px;
@@ -42,7 +42,7 @@ export const GenForm = FormWrapper;
 export const GenInput =(props)=>{
   
   return(
-    <InputWrapper>
+    <InputWrapper onBlur={props.onBlur}>
       <InputLabel>
       {props.inputLabel}
       </InputLabel>
@@ -157,7 +157,9 @@ export const ProductCard =(props)=>{
           <PopupSelectWrapper>
             <GenText>Selecione a quantidade desejada</GenText>
               <Select onChange={handleQuantitySelected} autoFocus>
-                {optionsList.map(option=><Option value={option}>{option}</Option>)}
+                {optionsList.map((option, index)=>{
+                  return <Option key={index} value={option}>{option}</Option>
+                })}
               </Select>
             <PopupSelectButton 
             id={props.id} value={quantity} 

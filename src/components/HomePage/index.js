@@ -71,12 +71,13 @@ const HomePage = () => {
   }
 
   //função da barra de busca, que retorna o texto que o usuário digitou no input
-  const filteredByText = () => {
+  const filteredByText = (event) => {
+    
     const filter = restaurantsList.filter((restaurant) => {
-      return restaurant.name.toLowerCase().includes(inputValue, 0)
+      return restaurant.name.toLowerCase().includes(event.target.value, 0)
     });
-
     setSearchList(filter);
+    setDisplayRestaurants('SEARCH');
   }
   //função side-effect que retorna os dados atualizados dos restaurantes, buscados pelo endpoint Get Restaurants
   useEffect(() => {
@@ -129,7 +130,7 @@ const HomePage = () => {
   useEffect(()=>{
     restaurantsList.length > 0 && setTimeout(()=>setShowLoadingPage(false), 500);
   },[restaurantsList]);
-
+  
   const conditionalRender = ()=>{
     if(showLoadingPage === true){
       return <LoadingPage src={LogoRappiW}/>
@@ -137,20 +138,21 @@ const HomePage = () => {
     return(
       <MainWrapper>
         <GenInput
+          onBlur={()=>setDisplayRestaurants('ALL')}
           type='text'
           id='idInputSearch'
-          placeholder='Restaurante'
+          placeholder='Busque o restaurante pelo nome'
           onChange={onChangeSearch}
           value={inputValue}
           onKeyDown={filteredByText}
-          onClick={() => setDisplayRestaurants('SEARCH')}
         />
         <CategoriesList>
-          {categoryList.map((category) => {
+          {categoryList.map((category, index) => {
             return (
               <GenText
                 sticky
                 hover
+                key={index}
                 id={category}
                 onClick={filteredRestaurantsLists}
               >
@@ -159,12 +161,15 @@ const HomePage = () => {
             )
           })}
         </CategoriesList>
-        <MainWrapper2>
+        <MainWrapper2 onClick={
+        ()=> filteredRestaurants.length > 0 && setDisplayRestaurants('ALL')
+        }>
           {
             displayRestaurants === 'CATEGORY' &&
-            filteredRestaurants.map((restaurant) => {
+            filteredRestaurants.map((restaurant, index) => {
               return (
                 <RestaurantCard
+                  key={index}
                   openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
                   src={restaurant.logoUrl}
                   restaurantName={restaurant.name}
@@ -177,9 +182,10 @@ const HomePage = () => {
             ||
 
             displayRestaurants === 'SEARCH' &&
-            searchList.map((restaurant) => {
+            searchList.map((restaurant, index) => {
               return (
                 <RestaurantCard
+                  key={index}
                   openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
                   src={restaurant.logoUrl}
                   restaurantName={restaurant.name}
@@ -191,9 +197,10 @@ const HomePage = () => {
 
             ||
 
-            restaurantsList.map((restaurant) => {
+            restaurantsList.map((restaurant, index) => {
               return (
                 <RestaurantCard
+                  key={index}
                   openDetails={() => history.push(`/restaurant-detail/${restaurant.id}`)}
                   src={restaurant.logoUrl}
                   restaurantName={restaurant.name}

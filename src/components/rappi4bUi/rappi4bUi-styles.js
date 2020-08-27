@@ -110,11 +110,17 @@ export const HiText = styled.p`
 export const NavBarWrapper = styled.nav`
   position: fixed;
   background-color: #ffffff;
-  bottom: 0%;
-  max-width: 360px;
-  max-height: 49px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  //max-width: 360px;
+  height: 49px;
+  //display: grid;
+  //grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  
   border-top: 0.5px solid #b8b8b8;
 `;
 export const NavBarButton = styled.button`
