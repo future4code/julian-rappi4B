@@ -44,16 +44,17 @@ const CartPage =()=>{
   //Global-state: 13º- utilizar alguma das actions setadas no switch do storeReducer
 
   //Não foi possível criar uma função para limpar apenas um item do cart, pois ocorria um bug
-  //na renderização condicionar do botão de remover que mudava ele para adicionar na medida
+  //na renderização condicionaL do botão de remover a qual alterava o mesmo para adicionar na medida
   //em que removia os items de cima para baixo, mas não de baixo para cima "\_(''/)_/".
   const handleClearCart = ()=>{
     const confirm = window.confirm('Deseja esvaziar seu carrinho?')
     confirm === true &&
     setUserOrder([]);   
     cartContext.dispatch({
-      type: 'REMOVE_FROM_CART', filteredCart:[]
+      type: 'CLEAR_CART', filteredCart:[]
     });  
   };
+
   const handleSelectPayment=(e)=> setPaymentMethod(e.target.value);
 
   const handleConfirmOrder=async()=> {
@@ -150,9 +151,10 @@ const CartPage =()=>{
       <CartProductsView>
         {
           userOrder.length > 0 ?
-          userOrder.map(selectedProduct =>{
+          userOrder.map((selectedProduct, index) =>{
             return(
               <ProductCard 
+              key={index}
               src={selectedProduct.product.photoUrl}
               productName={selectedProduct.product.name}
               description={selectedProduct.product.description}

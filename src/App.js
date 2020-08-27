@@ -17,9 +17,15 @@ function App() {
 
   return (
     /* Global-state: 9º- envolver os componentes e as rotas com contexts */
-    <UserInfosContext.Provider value={{ userInfos: state.userInfos, dispatch: dispatch }}>
-      <RestaurantsListContext.Provider value={{ restaurantsList: state.restaurantsList, dispatch: dispatch }}>
-        <CartContext.Provider value={{ userCart: state.userCart, dispatch: dispatch }}>
+    <UserInfosContext.Provider value={{ 
+      userInfos: state.userInfos, dispatch: dispatch 
+      }}>
+      <RestaurantsListContext.Provider value={{ 
+        restaurantsList: state.restaurantsList, dispatch: dispatch 
+        }}>
+        <CartContext.Provider value={{ 
+          userCart: state.userCart, dispatch: dispatch 
+          }}>
           <AppWrapper>
             <Routes/>
           </AppWrapper>

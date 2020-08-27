@@ -19,12 +19,10 @@ export const storeReducer=(state, action)=>{
         {...state.userCart, [order.restaurantId]:order.currentOrder}
       };
 
-    case 'REMOVE_FROM_CART':
-      let filteredCart = action.filteredCart;
+    case 'CLEAR_CART':
       return {
-        ...state, userCart:{
-          ...state.userCart, cart: filteredCart
-      }};
+        ...state, userCart:{}
+      };
 
     case 'SET_RESTAURANTS_LIST':
       let restaurantsList = action.restaurantsList;

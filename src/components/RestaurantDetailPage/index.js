@@ -114,9 +114,10 @@ const RestaurantDetailPage =()=>{
             <MainWrapper>             
               {
                 products !== null &&
-                products.map((product) => {
+                products.map((product, index) => {
                   return(
                     <ProductCard
+                      key={index}
                       src={product.photoUrl}
                       productName={product.name}
                       description={product.description}

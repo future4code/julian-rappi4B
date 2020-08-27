@@ -29,7 +29,7 @@ const ProfilePage = () => {
 
   const [showLoadingPage, setShowLoadingPage] = useState(true);
   
-  const [ordersHistory, setOrdersHistory] = useState([])
+  const [ordersHistory, setOrdersHistory] = useState(null)
 
   useEffect(() => {
     api.get('orders/history', {headers: {
@@ -43,7 +43,7 @@ const ProfilePage = () => {
   }, []);
 
   useEffect(()=>{
-    ordersHistory.length > 0 && setShowLoadingPage(false)
+    ordersHistory != null && setShowLoadingPage(false)
   },[ordersHistory]);
 
   const conditionalRender = ()=>{
