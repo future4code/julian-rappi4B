@@ -123,7 +123,12 @@ const HomePage = () => {
       }
     })
       .then(response => {
-        setActiveOrder(response.data.order)
+        const curDate = new Date().getTime()
+        const responseData = response.data.order
+        
+        if(responseData.expiresAt > curDate){
+          setActiveOrder(responseData)
+        }
       })
   }, []);
 

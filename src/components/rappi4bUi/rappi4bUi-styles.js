@@ -292,26 +292,23 @@ export const PopupSelectButton = styled.button`
 `;
 export const OrderListenerCard = styled.article`
   position: fixed;
-  bottom:42px;
-  width: 360px;
+  left: 0px;
+  right: 0px;
+  z-index: 1;
+  bottom:50px;
   height: 118px;
   background-color: #e86e5a;
-  display:flex;
+  display: ${props=> props.hidde === false ?'flex':'none'};
   flex-direction: row;
   justify-content: space-between;
   border-top: 1px solid #b8b8b8;
   padding-bottom: 10px;
-  transition: height, width 1s linear 0.1s;
-  &:hover,&:active,&:focus{
-   height: 0;
-   width: 0;
-  };
 `;
 export const ClockView = styled.div`
   width: 80px;
   max-height: 90%;
   color: white;
-  display: ${props=> props.hidde === false ?'flex':'none'};
+  display: inherit;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -319,7 +316,7 @@ export const ClockView = styled.div`
 export const ActiveOrderDetails = styled.div`
   height: 100%;
   width:280px;
-  display: ${props=> props.hidde === false ?'flex':'none'};
+  display: inherit;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
