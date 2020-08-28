@@ -182,16 +182,17 @@ export const ListenerCard=(props)=>{
   const[hiddeCard, setHiddeCard] = useState(false);
 
   return(
-    <OrderListenerCard 
+    <OrderListenerCard
+    hidde={hiddeCard}
     onClick={()=> setHiddeCard( ! hiddeCard)} 
     >
-      <ClockView  onClick={()=> setHiddeCard( ! hiddeCard)} hidde={hiddeCard}>
+      <ClockView>
         <GenHiText largeIcon>
           <FaRegClock/>
         </GenHiText>
         <GenText minor>Clique para esconder</GenText>
       </ClockView>
-      <ActiveOrderDetails  onClick={()=> setHiddeCard( ! hiddeCard)} hidde={hiddeCard}> 
+      <ActiveOrderDetails> 
         <GenText white>Pedido em andamento</GenText>
         <GenText>{props.restaurantName}</GenText>
         <GenHiText>subtotal r${props.totalPrice}</GenHiText>
